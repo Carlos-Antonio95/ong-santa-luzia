@@ -3,52 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santa Luzia 🏠</title>
     <link rel="stylesheet" href="estilo.css">
-    <title>Santa luzia 🏠</title>
-
 </head>
+
 <body>
-    <header>
-        <img src="Logo Abrigo Santa Luzia.png" alt="Abrigo santa luzia" class="logo">
 
-         <div class="menu-toggle" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+    <!-- HEADER -->
+    <header class="header">
+        <img src="Logo Abrigo Santa Luzia.png" alt="Abrigo Santa Luzia" class="logo">
 
-    </div>
-        <nav id="menu">
-            
-                <li><a href="#">Inicio</a></li>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav id="menu" class="nav">
+            <ul>
+                <li><a href="#">Início</a></li>
                 <li><a href="#">Sobre</a></li>
                 <li><a href="#">Contato</a></li>
-                <li><a href="#" class="botao"> Faça uma doações</a></li>
+                <li><a href="#" class="botao">Faça uma doação</a></li>
+            </ul>
         </nav>
     </header>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <main>
-        <main class="main">
-            <img src="Amigos na luz do jardim.png" alt="amigos na luz do jardim" class="main-img">
-                <div class="main-texto">
-                    <h1>Abrigo Santa Luzia - Cuidando Com Amor</h1>
-                    <p>Instituição Dedicada ao Bem-Estar De Idosos Desde 1980</p>
-                    <a href="#" class="botao">Conheça nosso trabalho</a>
-                </div>
-        </main>
+
+        <!-- HERO (primeira seção) -->
+        <section class="hero">
+            <img src="Amigos na luz do jardim.png" alt="Idosos no jardim" class="hero-img">
+
+            <div class="hero-texto">
+                <h1>Abrigo Santa Luzia - Cuidando com Amor</h1>
+                <p>Instituição dedicada ao bem-estar de idosos desde 1980</p>
+                <a href="#" class="botao">Conheça nosso trabalho</a>
+            </div>
+        </section>
+
+        <!-- SOBRE / SERVIÇOS -->
+        <section class="servicos">
+            <img src="Ícone minimalista de maleta verde.png" alt="Profissionais" class="servico-img">
+
+            <div class="servico-texto">
+                <h2>Profissionais Capacitados</h2>
+                <p>
+                    Equipe multidisciplinar com experiência formada por médicos,
+                    enfermeiros, nutricionistas e cuidadoras de idosos.
+                </p>
+            </div>
+        </section>
+
     </main>
 
-    <main class="main02">
-        <img src="Ícone minimalista de maleta verde.png" alt="maleta verde" class="main-img2">
-        <div class="main-texto02">
-            <h2>Profissionais capacitados</h2>
-            <p>
-                Equipe multidisciplinar com <br>
-                experiência formada por <br>
-                medicos, enfermeiros,nutricionistas <br>
-                e cuidadadoras de idosos. <br>
-            </p>
-        </div>
-    </main>
     <script src="config.js"></script>
 </body>
 </html>
