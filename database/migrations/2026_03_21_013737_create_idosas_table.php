@@ -13,7 +13,7 @@ return new class extends Migration
     {
          Schema::create('idosas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
+            $table->string('nome')->index();
             $table->date('data_nascimento')->nullable();
             $table->string('estado_civil')->nullable();
             $table->string('rg')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('telefone')->nullable();
             $table->string('endereco')->nullable();
             $table->string('bairro')->nullable();
-            $table->string('cidade')->nullable();
+            $table->string('cidade')->nullable()->index();
             $table->string('nome_social')->nullable();
             $table->string('apelido')->nullable();
             $table->timestamps();

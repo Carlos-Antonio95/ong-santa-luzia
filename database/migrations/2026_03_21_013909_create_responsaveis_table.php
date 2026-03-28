@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('responsaveis', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
+            $table->string('nome')->index();
             $table->string('rg')->nullable();
             $table->string('orgao_emissor')->nullable();
             $table->string('cpf')->unique();
