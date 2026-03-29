@@ -47,6 +47,11 @@ class Idosa extends Model
     {
         return $this->hasMany(TermoAbrigamento::class, 'idosa_id');
     }
+    public function ultimoTermo()
+{
+    return $this->hasOne(TermoAbrigamento::class, 'idosa_id')->latestOfMany();
+}
+
 
     public function scopeSearch($query, ?string $search)
     {

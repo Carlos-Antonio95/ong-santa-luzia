@@ -103,9 +103,20 @@ class IdosaController extends Controller
             ->with('success', 'Idosa removida com sucesso.');
     }
 
-    public function dashboard()
-    {
-        $idosas = \App\Models\Idosa::with('termos.responsavel')->get();
-        return view('dashboard', compact('idosas'));
+   public function dashboard(Request $request)
+{
+    $idosas = Idosa::with(['termos.responsavel'])->latest()->get();
+
+    $idosaSelecionada = null;
+
+    if ($request->filled('idosa')) {
+        $idosaSelecionada = Idosa::with([
+            'planoIndividual',
+            'ultimoTermo.responsavel',
+            'termos.responsavel',
+        ])->findOrFail($request->idosa);
     }
+
+    return view('dashboard', compact('idosas', 'idosaSelecionada'));
+}
 }

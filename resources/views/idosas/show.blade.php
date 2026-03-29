@@ -57,6 +57,8 @@
             border-radius: 8px;
             font-weight: bold;
             display: inline-block;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-secundario {
@@ -65,6 +67,10 @@
 
         .btn-voltar {
             background: #1f2020;
+        }
+
+        .btn-imprimir {
+            background: #f39c12;
         }
 
         .abas {
@@ -131,11 +137,60 @@
             color: #777;
             font-style: italic;
         }
+
+        .acoes-card {
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .print-header {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-area, .print-area * {
+                visibility: visible;
+            }
+
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .print-header {
+                display: block;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #2ecc71;
+                padding-bottom: 12px;
+            }
+
+            .print-hide {
+                display: none !important;
+            }
+
+            .campo, .termo-card {
+                break-inside: avoid;
+            }
+        }
     </style>
 </head>
 <body>
 
-<header class="header">
+<header class="header print-hide">
     <div class="logo-area">
         <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}" alt="Logo">
         <h1>Perfil da Idosa</h1>
@@ -144,16 +199,15 @@
     <nav>
         <ul>
             <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/idosas/{{ $idosa->id }}/edit">Editar Cadastro</a></li>
-            <li><a href="/idosas/{{ $idosa->id }}/plano">Plano</a></li>
-            <li><a href="/idosas/{{ $idosa->id }}/termo">Termo</a></li>
+           <li><a href="{{ route('dashboard', ['idosa' => $idosa->id]) }}">Editar Cadastro</a></li>
+           <li><a href="{{ route('dashboard', ['idosa' => $idosa->id, 'aba' => 'termo']) }}">Novo Termo</a></li>
         </ul>
     </nav>
 </header>
 
 <div class="perfil-container">
 
-    <div class="perfil-topo">
+    <div class="perfil-topo print-hide">
         <h2>{{ $idosa->nome }}</h2>
         <p><strong>CPF:</strong> {{ $idosa->cpf }}</p>
 
@@ -181,19 +235,33 @@
 
         <div class="acoes">
             <a href="/dashboard" class="btn-acao btn-voltar">Voltar</a>
-            <a href="/idosas/{{ $idosa->id }}/edit" class="btn-acao btn-secundario">Editar Dados</a>
-            <a href="/idosas/{{ $idosa->id }}/plano" class="btn-acao">Abrir Plano</a>
-            <a href="/idosas/{{ $idosa->id }}/termo" class="btn-acao">Novo Termo</a>
+            <a href="{{ route('dashboard', ['idosa' => $idosa->id]) }}" class="btn-acao btn-secundario">Editar Dados</a>
+            <a href="{{ route('dashboard', ['idosa' => $idosa->id, 'aba' => 'termo']) }}" class="btn-acao">Novo Termo</a>
+
+            <a href="{{ route('idosas.pdf.cadastro', $idosa->id) }}" class="btn-acao">PDF Cadastro</a>
+            <a href="{{ route('idosas.pdf.plano', $idosa->id) }}" class="btn-acao">PDF Plano</a>
+            <a href="{{ route('idosas.pdf.termo', $idosa->id) }}" class="btn-acao">PDF Termo</a>
+            <a href="{{ route('idosas.pdf.completo', $idosa->id) }}" class="btn-acao btn-secundario">PDF Completo</a>
+
+            <button type="button" class="btn-acao btn-imprimir" onclick="imprimirTudo()">
+                Imprimir Tudo
+            </button>
         </div>
     </div>
 
-    <div class="abas">
+    <div class="abas print-hide">
         <button class="aba-btn ativa" onclick="abrirAba('dados', this)">Dados Pessoais</button>
         <button class="aba-btn" onclick="abrirAba('plano', this)">Plano Individual</button>
         <button class="aba-btn" onclick="abrirAba('termos', this)">Termos</button>
     </div>
 
-    <div id="dados" class="aba-conteudo ativa">
+    <div id="dados" class="aba-conteudo ativa print-area">
+        <div class="print-header">
+            <h2>Cadastro da Idosa</h2>
+            <p><strong>Nome:</strong> {{ $idosa->nome }}</p>
+            <p><strong>CPF:</strong> {{ $idosa->cpf }}</p>
+        </div>
+
         <div class="grid-dados">
             <div class="campo"><strong>Nome</strong>{{ $idosa->nome ?? '-' }}</div>
             <div class="campo"><strong>Nome social</strong>{{ $idosa->nome_social ?? '-' }}</div>
@@ -212,12 +280,23 @@
             <div class="campo"><strong>Bairro</strong>{{ $idosa->bairro ?? '-' }}</div>
             <div class="campo"><strong>Cidade</strong>{{ $idosa->cidade ?? '-' }}</div>
         </div>
+
+        <div class="acoes-card print-hide">
+            <button type="button" class="btn-acao btn-imprimir" onclick="imprimirSecao('dados')">Imprimir Cadastro</button>
+            <a href="{{ route('idosas.pdf.cadastro', $idosa->id) }}" class="btn-acao">Baixar PDF Cadastro</a>
+        </div>
     </div>
 
-    <div id="plano" class="aba-conteudo">
+    <div id="plano" class="aba-conteudo print-area">
+        <div class="print-header">
+            <h2>Plano Individual</h2>
+            <p><strong>Nome:</strong> {{ $idosa->nome }}</p>
+            <p><strong>CPF:</strong> {{ $idosa->cpf }}</p>
+        </div>
+
         @if($idosa->planoIndividual)
             <div class="grid-dados">
-                <div class="campo"><strong>Data de ingresso</strong>{{ $idosa->planoIndividual->data_ingresso ?? '-' }}</div>
+                <div class="campo"><strong>Data de ingresso</strong>{{ $idosa->planoIndividual->data_ingresso ? \Carbon\Carbon::parse($idosa->planoIndividual->data_ingresso)->format('d/m/Y') : '-' }}</div>
                 <div class="campo"><strong>Nº prontuário</strong>{{ $idosa->planoIndividual->numero_prontuario ?? '-' }}</div>
                 <div class="campo"><strong>Origem da residência</strong>{{ $idosa->planoIndividual->origem_residencia ?? '-' }}</div>
                 <div class="campo"><strong>Motivo da institucionalização</strong>{{ $idosa->planoIndividual->motivo_institucionalizacao ?? '-' }}</div>
@@ -236,12 +315,23 @@
         @else
             <p class="vazio">Nenhum plano individual cadastrado.</p>
         @endif
+
+        <div class="acoes-card print-hide">
+            <button type="button" class="btn-acao btn-imprimir" onclick="imprimirSecao('plano')">Imprimir Plano</button>
+            <a href="{{ route('idosas.pdf.plano', $idosa->id) }}" class="btn-acao">Baixar PDF Plano</a>
+        </div>
     </div>
 
-    <div id="termos" class="aba-conteudo">
+    <div id="termos" class="aba-conteudo print-area">
+        <div class="print-header">
+            <h2>Termo(s) de Abrigamento</h2>
+            <p><strong>Nome:</strong> {{ $idosa->nome }}</p>
+            <p><strong>CPF:</strong> {{ $idosa->cpf }}</p>
+        </div>
+
         @forelse($idosa->termos as $termo)
             <div class="termo-card">
-                <p><strong>Data de início:</strong> {{ $termo->data_inicio ?? '-' }}</p>
+                <p><strong>Data de início:</strong> {{ $termo->data_inicio ? \Carbon\Carbon::parse($termo->data_inicio)->format('d/m/Y') : '-' }}</p>
                 <p><strong>Responsável:</strong> {{ $termo->responsavel->nome ?? '-' }}</p>
                 <p><strong>CPF do responsável:</strong> {{ $termo->responsavel->cpf ?? '-' }}</p>
                 <p><strong>Telefone do responsável:</strong> {{ $termo->responsavel->telefone ?? '-' }}</p>
@@ -253,6 +343,11 @@
         @empty
             <p class="vazio">Nenhum termo de abrigamento cadastrado.</p>
         @endforelse
+
+        <div class="acoes-card print-hide">
+            <button type="button" class="btn-acao btn-imprimir" onclick="imprimirSecao('termos')">Imprimir Termo</button>
+            <a href="{{ route('idosas.pdf.termo', $idosa->id) }}" class="btn-acao">Baixar PDF Termo</a>
+        </div>
     </div>
 
 </div>
@@ -269,6 +364,42 @@
 
         document.getElementById(id).classList.add('ativa');
         botao.classList.add('ativa');
+    }
+
+    function imprimirTudo() {
+        const secoes = document.querySelectorAll('.aba-conteudo');
+        const abas = document.querySelector('.abas');
+        const topo = document.querySelector('.perfil-topo');
+
+        abas.classList.add('print-hide');
+        topo.classList.add('print-hide');
+
+        secoes.forEach(secao => {
+            secao.classList.add('ativa');
+        });
+
+        window.print();
+
+        secoes.forEach(secao => {
+            secao.classList.remove('ativa');
+        });
+
+        document.getElementById('dados').classList.add('ativa');
+        document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativa'));
+        document.querySelector('.aba-btn').classList.add('ativa');
+
+        abas.classList.remove('print-hide');
+        topo.classList.remove('print-hide');
+    }
+
+    function imprimirSecao(id) {
+        document.querySelectorAll('.aba-conteudo').forEach(secao => {
+            secao.classList.remove('ativa');
+        });
+
+        document.getElementById(id).classList.add('ativa');
+
+        window.print();
     }
 </script>
 

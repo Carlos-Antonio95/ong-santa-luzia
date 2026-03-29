@@ -107,4 +107,53 @@ class TermoAbrigamentoController extends Controller
             ->route('termos.index')
             ->with('success', 'Termo de abrigamento removido com sucesso.');
     }
+
+    public function storeOrUpdate(Request $request, Idosa $idosa)
+    {
+        $data = $request->validate([
+            'responsavel_nome' => ['required', 'string', 'max:255'],
+            'responsavel_cpf' => ['required', 'string', 'max:14'],
+            'responsavel_rg' => ['nullable', 'string', 'max:20'],
+            'responsavel_orgao_emissor' => ['nullable', 'string', 'max:50'],
+            'responsavel_telefone' => ['nullable', 'string', 'max:20'],
+            'responsavel_endereco' => ['nullable', 'string', 'max:255'],
+            'data_inicio' => ['nullable', 'date'],
+            'observacoes' => ['nullable', 'string'],
+            'assinado_responsavel' => ['nullable', 'boolean'],
+            'assinado_psicologo' => ['nullable', 'boolean'],
+            'assinado_assistente_social' => ['nullable', 'boolean'],
+        ]);
+
+        $responsavel = Responsavel::updateOrCreate(
+            ['cpf' => preg_replace('/\D+/', '', $data['responsavel_cpf'])],
+            [
+                'nome' => $data['responsavel_nome'],
+                'rg' => $data['responsavel_rg'] ?? null,
+                'orgao_emissor' => $data['responsavel_orgao_emissor'] ?? null,
+                'telefone' => $data['responsavel_telefone'] ?? null,
+                'endereco' => $data['responsavel_endereco'] ?? null,
+            ]
+        );
+
+        $ultimoTermo = $idosa->ultimoTermo;
+
+        $payload = [
+            'idosa_id' => $idosa->id,
+            'responsavel_id' => $responsavel->id,
+            'data_inicio' => $data['data_inicio'] ?? null,
+            'observacoes' => $data['observacoes'] ?? null,
+            'assinado_responsavel' => $request->boolean('assinado_responsavel'),
+            'assinado_psicologo' => $request->boolean('assinado_psicologo'),
+            'assinado_assistente_social' => $request->boolean('assinado_assistente_social'),
+        ];
+
+        if ($ultimoTermo) {
+            $ultimoTermo->update($payload);
+        } else {
+            TermoAbrigamento::create($payload);
+        }
+
+        return redirect()->route('dashboard', ['idosa' => $idosa->id])
+            ->with('success', 'Termo de abrigamento salvo com sucesso.');
+    }
 }

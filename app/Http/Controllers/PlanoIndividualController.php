@@ -8,6 +8,7 @@ use App\Models\Idosa;
 use App\Models\PlanoIndividual;
 use Illuminate\Http\Request;
 
+
 class PlanoIndividualController extends Controller
 {
     public function index(Request $request)
@@ -77,5 +78,42 @@ class PlanoIndividualController extends Controller
         return redirect()
             ->route('planos.index')
             ->with('success', 'Plano individual removido com sucesso.');
+    }
+
+
+
+
+
+
+    public function storeOrUpdate(Request $request, Idosa $idosa)
+    {
+        $data = $request->validate([
+            'data_ingresso' => ['nullable', 'date'],
+            'numero_prontuario' => ['nullable', 'string', 'max:255'],
+            'origem_residencia' => ['nullable', 'string', 'max:255'],
+            'motivo_institucionalizacao' => ['nullable', 'string'],
+            'renda' => ['nullable', 'numeric'],
+            'administra_financeiro' => ['nullable', 'boolean'],
+            'escolaridade' => ['nullable', 'string', 'max:255'],
+            'profissao' => ['nullable', 'string', 'max:255'],
+            'religiao' => ['nullable', 'string', 'max:255'],
+            'diagnostico_medico' => ['nullable', 'string'],
+            'grau_dependencia' => ['nullable', 'string', 'max:255'],
+            'possui_plano_saude' => ['nullable', 'boolean'],
+            'descricao_medicacao' => ['nullable', 'string'],
+            'restricao_alimentar' => ['nullable', 'string'],
+            'rotina' => ['nullable', 'string'],
+        ]);
+
+        $data['administra_financeiro'] = $request->boolean('administra_financeiro');
+        $data['possui_plano_saude'] = $request->boolean('possui_plano_saude');
+
+        PlanoIndividual::updateOrCreate(
+            ['idosa_id' => $idosa->id],
+            $data
+        );
+
+        return redirect()->route('dashboard', ['idosa' => $idosa->id])
+            ->with('success', 'Plano individual salvo com sucesso.');
     }
 }
