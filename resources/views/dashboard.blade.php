@@ -171,7 +171,14 @@
             <li><a href="{{ route('dashboard') }}">Visão Geral</a></li>
             <li><a href="#">Usuários</a></li>
             <li><a href="#">Configurações</a></li>
-            <li><a href="#">Sair</a></li>
+           <li>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" style="background:none;border:none;color:inherit;cursor:pointer;">
+                    Sair
+                </button>
+            </form>
+        </li>
         </ul>
     </nav>
 </header>

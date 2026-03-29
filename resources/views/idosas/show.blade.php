@@ -201,6 +201,12 @@
             <li><a href="/dashboard">Dashboard</a></li>
            <li><a href="{{ route('dashboard', ['idosa' => $idosa->id]) }}">Editar Cadastro</a></li>
            <li><a href="{{ route('dashboard', ['idosa' => $idosa->id, 'aba' => 'termo']) }}">Novo Termo</a></li>
+           <li>
+                <form id="logout-form-show" action="{{ route('logout') }}" method="POST" style="display:none;">
+                    @csrf
+                </form>
+                <a href="{{ route('home') }}" onclick="event.preventDefault(); document.getElementById('logout-form-show').submit();">Sair</a>
+           </li>
         </ul>
     </nav>
 </header>
