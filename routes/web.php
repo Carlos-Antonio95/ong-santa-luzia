@@ -46,3 +46,7 @@ Route::middleware(['auth'])->group(function () {
 */
 
 //require __DIR__.'/auth.php';
+
+Route::get('/dashboard', [IdosaController::class, 'dashboard']);
+Route::post('/idosas', [IdosaController::class, 'store']);
+Route::delete('/idosas/{id}', [IdosaController::class, 'destroy']);

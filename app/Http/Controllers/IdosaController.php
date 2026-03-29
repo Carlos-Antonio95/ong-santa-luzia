@@ -51,8 +51,7 @@ class IdosaController extends Controller
 
         Idosa::create($data);
 
-        return redirect()
-            ->route('idosas.index')
+        return redirect('/dashboard')
             ->with('success', 'Idosa cadastrada com sucesso.');
     }
 
@@ -91,9 +90,8 @@ class IdosaController extends Controller
 
         $idosa->update($data);
 
-        return redirect()
-            ->route('idosas.index')
-            ->with('success', 'Idosa atualizada com sucesso.');
+        return redirect('/dashboard')
+         ->with('success', 'Idosa cadastrada com sucesso.');
     }
 
     public function destroy(Idosa $idosa)
@@ -103,5 +101,11 @@ class IdosaController extends Controller
         return redirect()
             ->route('idosas.index')
             ->with('success', 'Idosa removida com sucesso.');
+    }
+
+    public function dashboard()
+    {
+        $idosas = \App\Models\Idosa::with('termos.responsavel')->get();
+        return view('dashboard', compact('idosas'));
     }
 }
