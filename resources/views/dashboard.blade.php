@@ -241,13 +241,22 @@
             <li><a href="#">Usuários</a></li>
             <li><a href="#">Configurações</a></li>
             <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" style="background:none;border:none;color:inherit;cursor:pointer;">
-                        Sair
-                    </button>
-                </form>
-            </li>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" style="
+            background: none;
+            border: none;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 16px;
+        ">
+            Sair
+        </button>
+    </form>
+</li>
         </ul>
     </nav>
 </header>
@@ -263,10 +272,6 @@
             <p>👵 Idosos acolhidos</p>
         </div>
 
-        <div class="box">
-            <h3>1280+</h3>
-            <p>🍽️ Refeições por mês</p>
-        </div>
 
         <div class="box" onclick="toggleListaDoadores()">
             <h3>{{ $doadores->count() }}</h3>
