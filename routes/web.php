@@ -62,7 +62,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/idosas/pdf/lista', [PdfIdosaController::class, 'lista'])
         ->name('idosas.pdf.lista');
 
-
+    // CRUD de voluntários (Sprint 1 e 2)
+    Route::resource('voluntarios', App\Http\Controllers\VoluntarioController::class);
 
     Route::resource('doadores', DoadorController::class);
     Route::resource('doacoes', DoacaoController::class)->except(['store']);
@@ -72,7 +73,12 @@ Route::middleware(['auth'])->group(function () {
     // Registro de usuário via dashboard (autenticado)
     Route::get('/register-user', [RegisterUserController::class, 'create'])->name('register.user');
     Route::post('/register-user', [RegisterUserController::class, 'store'])->name('register.user.store');
+
+   // Configurações do usuário (Sprint 4)
+    Route::get('/settings', [App\Http\Controllers\UserSettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [App\Http\Controllers\UserSettingController::class, 'update'])->name('settings.update');
 });
+
 
 /*
 |--------------------------------------------------------------------------
