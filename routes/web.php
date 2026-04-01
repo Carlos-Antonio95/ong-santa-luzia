@@ -8,6 +8,7 @@ use App\Http\Controllers\TermoAbrigamentoController;
 use App\Http\Controllers\PdfIdosaController;
 use App\Http\Controllers\DoadorController;
 use App\Http\Controllers\DoacaoController;
+use App\Http\Controllers\Auth\RegisterUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('doacoes', DoacaoController::class)->except(['store']);
 
     Route::post('/doadores/{doador}/doacoes', [DoacaoController::class, 'store'])->name('doacoes.store');
+
+    // Registro de usuário via dashboard (autenticado)
+    Route::get('/register-user', [RegisterUserController::class, 'create'])->name('register.user');
+    Route::post('/register-user', [RegisterUserController::class, 'store'])->name('register.user.store');
 });
 
 /*

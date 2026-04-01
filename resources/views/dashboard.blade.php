@@ -212,6 +212,51 @@
             padding: 20px;
             border-radius: 12px;
         }
+        .menu-usuario {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background: white;
+    min-width: 220px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    z-index: 999;
+    overflow: hidden;
+}
+
+.submenu a {
+    display: block;
+    padding: 12px 16px;
+    color: #222;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+}
+
+.submenu a:last-child {
+    border-bottom: none;
+}
+
+.submenu a:hover {
+    background: #f5f5f5;
+}
+
+.submenu.show {
+    display: block;
+}
     </style>
 </head>
 
@@ -238,7 +283,17 @@
     <nav>
         <ul>
             <li><a href="{{ route('dashboard') }}">Visão Geral</a></li>
-            <li><a href="#">Usuários</a></li>
+            <li>
+                <div class="menu-usuario">
+    <a href="#" onclick="toggleDropdown(event)" class="menu-link">Usuários</a>
+
+    <div class="submenu" id="submenuUsuarios">
+        <div style="padding:12px 16px; font-weight:600; color:#2ecc71; border-bottom:1px solid #eee;">Olá, {{ explode(' ', Auth::user()->name)[0] }}</div>
+        <a href="{{ route('password.confirm') }}">Alterar Senha</a>
+        <a href="{{ route('register.user') }}">Registrar Novo Usuário</a>
+    </div>
+</div>
+            </li>
             <li><a href="#">Configurações</a></li>
             <li>
     <form method="POST" action="{{ route('logout') }}">
@@ -946,6 +1001,22 @@ new Chart(document.getElementById('grafico-doacoes'), {
         ]
     }
 });
+
+
+function toggleDropdown(event) {
+    event.preventDefault();
+    document.getElementById('submenuUsuarios').classList.toggle('show');
+}
+
+document.addEventListener('click', function(event) {
+    const menu = document.querySelector('.menu-usuario');
+    const submenu = document.getElementById('submenuUsuarios');
+
+    if (!menu.contains(event.target)) {
+        submenu.classList.remove('show');
+    }
+});
+
 </script>
 
 </body>
