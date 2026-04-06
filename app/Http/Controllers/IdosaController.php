@@ -6,7 +6,9 @@ use App\Models\Idosa;
 use Illuminate\Http\Request;
 use App\Models\Doador;
 use App\Models\Doacao;
+use App\Models\Voluntario;
 use Illuminate\Support\Facades\DB;
+use App\Models\UserSetting;
 
 class IdosaController extends Controller
 {
@@ -129,6 +131,12 @@ class IdosaController extends Controller
         $doadorSelecionado = Doador::with('doacoes')->findOrFail($request->doador);
     }
 
+    $voluntarios = Voluntario::latest()->get();
+    $voluntarioSelecionado = null;
+    if ($request->filled('voluntario')) {
+        $voluntarioSelecionado = Voluntario::findOrFail($request->voluntario);
+    }
+
     $doacoesAgrupadas = Doacao::selectRaw('YEAR(data_doacao) as ano, MONTH(data_doacao) as mes, SUM(valor) as total')
         ->whereIn(DB::raw('YEAR(data_doacao)'), [now()->year - 1, now()->year])
         ->groupByRaw('YEAR(data_doacao), MONTH(data_doacao)')
@@ -149,14 +157,20 @@ class IdosaController extends Controller
             $dadosAnoPassado[$indice] = (float) $item->total;
         }
     }
+    $settings = UserSetting::where('user_id', auth()->id())
+    ->pluck('value', 'key')
+    ->toArray();
 
     return view('dashboard', compact(
         'idosas',
         'idosaSelecionada',
         'doadores',
         'doadorSelecionado',
+        'voluntarios',
+        'voluntarioSelecionado',
         'dadosMesAtual',
-        'dadosAnoPassado'
+        'dadosAnoPassado',
+        'settings'
     ));
 }
 }

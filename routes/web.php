@@ -9,6 +9,7 @@ use App\Http\Controllers\PdfIdosaController;
 use App\Http\Controllers\DoadorController;
 use App\Http\Controllers\DoacaoController;
 use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\UserSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/register-user', [RegisterUserController::class, 'store'])->name('register.user.store');
 
    // Configurações do usuário (Sprint 4)
-    Route::get('/settings', [App\Http\Controllers\UserSettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [App\Http\Controllers\UserSettingController::class, 'update'])->name('settings.update');
+   Route::post('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
 });
 
 

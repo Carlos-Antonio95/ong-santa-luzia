@@ -294,7 +294,6 @@
     </div>
 </div>
             </li>
-            <li><a href="#">Configurações</a></li>
             <li>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
@@ -322,19 +321,19 @@
     <h2>Nosso Impacto</h2>
 
     <div class="dashboard-container">
-        <div class="box" onclick="toggleListaIdosos()">
+        <div class="box" onclick="toggleListaIdosos()" style="cursor:pointer;">
             <h3>{{ $idosas->count() }}</h3>
             <p>👵 Idosos acolhidos</p>
         </div>
 
 
-        <div class="box" onclick="toggleListaDoadores()">
+        <div class="box" onclick="toggleListaDoadores()" style="cursor:pointer;">
             <h3>{{ $doadores->count() }}</h3>
             <p>❤️ Doadores</p>
         </div>
 
-        <div class="box">
-            <h3>20</h3>
+        <div class="box" onclick="toggleListaVoluntarios()" style="cursor:pointer;">
+            <h3>{{ $voluntarios->count() }}</h3>
             <p>🤝 Voluntários</p>
         </div>
     </div>
@@ -815,8 +814,119 @@
             </table>
         </div>
 
-       
+        
     </div>
+    {{-- LISTA DE VOLUNTARIOS --}}
+        <div id="lista-voluntarios" class="bloco-lista" style="{{ $voluntarioSelecionado || old('form_tipo') === 'novo_voluntario' ? 'display:block;' : 'display:none;' }}">
+            <h2>Lista de Voluntários</h2>
+
+            <button class="btn-add" type="button" onclick="toggleFormVoluntario()">+ Novo Voluntário</button>
+
+            <div id="form-container-voluntario" class="form-container" style="{{ old('form_tipo') === 'novo_voluntario' ? 'display:block;' : 'display:none;' }}">
+                <form method="POST" action="{{ route('voluntarios.store') }}">
+                    @csrf
+                    <input type="hidden" name="form_tipo" value="novo_voluntario">
+
+                    <div class="grupo-campos">
+                        <input type="text" name="nome" placeholder="Nome" value="{{ old('nome') }}" required>
+                        <input type="email" name="email" placeholder="E-mail" value="{{ old('email') }}" required>
+                        <input type="text" name="telefone" placeholder="Telefone" value="{{ old('telefone') }}">
+                        <input type="date" name="data_nascimento" value="{{ old('data_nascimento') }}">
+                        <input type="text" name="skills" placeholder="Habilidades / skills" value="{{ old('skills') }}">
+                    </div>
+
+                    <div class="grupo-campos">
+                        <textarea name="observacoes" placeholder="Observações">{{ old('observacoes') }}</textarea>
+                    </div>
+
+                    <div style="margin-top:15px;">
+                        <button type="submit" class="btn-add">Salvar Novo Voluntário</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tabela-wrapper">
+                @if($voluntarioSelecionado)
+                    <div class="painel-edicao">
+                        <h2>Editando Voluntário: {{ $voluntarioSelecionado->nome }}</h2>
+
+                        <div class="resumo-selecao">
+                            <div class="resumo-box">
+                                <strong>E-mail</strong><br>
+                                {{ $voluntarioSelecionado->email ?? '-' }}
+                            </div>
+                            <div class="resumo-box">
+                                <strong>Telefone</strong><br>
+                                {{ $voluntarioSelecionado->telefone ?? '-' }}
+                            </div>
+                            <div class="resumo-box">
+                                <strong>Data Nascimento</strong><br>
+                                {{ optional($voluntarioSelecionado->data_nascimento)->format('d/m/Y') ?? '-' }}
+                            </div>
+                        </div>
+
+                        <form method="POST" action="{{ route('voluntarios.update', $voluntarioSelecionado->id) }}">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="grupo-campos">
+                                <input type="text" name="nome" value="{{ old('nome', $voluntarioSelecionado->nome) }}" placeholder="Nome" required>
+                                <input type="email" name="email" value="{{ old('email', $voluntarioSelecionado->email) }}" placeholder="E-mail" required>
+                                <input type="text" name="telefone" value="{{ old('telefone', $voluntarioSelecionado->telefone) }}" placeholder="Telefone">
+                                <input type="date" name="data_nascimento" value="{{ old('data_nascimento', optional($voluntarioSelecionado->data_nascimento)->format('Y-m-d')) }}">
+                                <input type="text" name="skills" value="{{ old('skills', $voluntarioSelecionado->skills) }}" placeholder="Habilidades / skills">
+                            </div>
+
+                            <div class="grupo-campos">
+                                <textarea name="observacoes" placeholder="Observações">{{ old('observacoes', $voluntarioSelecionado->observacoes) }}</textarea>
+                            </div>
+
+                            <div style="margin-top:15px;">
+                                <button type="submit" class="btn-add">Salvar Voluntário</button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th>Habilidades</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($voluntarios as $voluntario)
+                            <tr>
+                                <td>{{ $voluntario->nome }}</td>
+                                <td>{{ $voluntario->email }}</td>
+                                <td>{{ $voluntario->telefone ?? '-' }}</td>
+                                <td>{{ $voluntario->skills ? (strlen($voluntario->skills) > 60 ? substr($voluntario->skills, 0, 60).'...' : $voluntario->skills) : '-' }}</td>
+                                <td>
+                                    <div class="acoes-linha">
+                                        <a href="{{ route('dashboard', ['voluntario' => $voluntario->id]) }}">
+                                            <button class="edit" type="button">Editar</button>
+                                        </a>
+                                        <form method="POST" action="{{ route('voluntarios.destroy', $voluntario->id) }}" onsubmit="return confirm('Deseja realmente excluir este voluntário?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="delete" type="submit">Excluir</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" style="text-align:center;">Nenhum voluntário cadastrado.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
 </section>
 </main>
 
@@ -836,23 +946,45 @@
 
 <script>
 function toggleListaIdosos() {
-    let lista = document.getElementById("lista-idosos");
-    lista.style.display = lista.style.display === "block" ? "none" : "block";
+    const lista = document.getElementById("lista-idosos");
+    if (!lista) return;
+    const atual = window.getComputedStyle(lista).display;
+    lista.style.display = atual === "none" ? "block" : "none";
 }
 
 function toggleFormIdosa() {
-    let form = document.getElementById("form-container-idosa");
-    form.style.display = form.style.display === "block" ? "none" : "block";
+    const form = document.getElementById("form-container-idosa");
+    if (!form) return;
+    const atual = window.getComputedStyle(form).display;
+    form.style.display = atual === "none" ? "block" : "none";
 }
 
 function toggleListaDoadores() {
-    let lista = document.getElementById("lista-doadores");
-    lista.style.display = lista.style.display === "block" ? "none" : "block";
+    const lista = document.getElementById("lista-doadores");
+    if (!lista) return;
+    const atual = window.getComputedStyle(lista).display;
+    lista.style.display = atual === "none" ? "block" : "none";
 }
 
 function toggleFormDoador() {
-    let form = document.getElementById("form-container-doador");
-    form.style.display = form.style.display === "block" ? "none" : "block";
+    const form = document.getElementById("form-container-doador");
+    if (!form) return;
+    const atual = window.getComputedStyle(form).display;
+    form.style.display = atual === "none" ? "block" : "none";
+}
+
+function toggleListaVoluntarios() {
+    const lista = document.getElementById("lista-voluntarios");
+    if (!lista) return;
+    const atual = window.getComputedStyle(lista).display;
+    lista.style.display = atual === "none" ? "block" : "none";
+}
+
+function toggleFormVoluntario() {
+    const form = document.getElementById("form-container-voluntario");
+    if (!form) return;
+    const atual = window.getComputedStyle(form).display;
+    form.style.display = atual === "none" ? "block" : "none";
 }
 
 function mostrarAbaIdosa(id) {
@@ -934,6 +1066,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (temDoadorSelecionado) {
         mostrarAbaDoador('aba-doador-cadastro');
+    }
+    if (temVoluntarioSelecionado) {
+        const lista = document.getElementById('lista-voluntarios');
+        if (lista) {
+            lista.style.display = 'block';
+        }
     }
 });
 
