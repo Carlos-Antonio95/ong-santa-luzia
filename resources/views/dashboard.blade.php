@@ -276,7 +276,7 @@
 
 <header class="header">
     <a class="logo-area" href="{{ route('dashboard') }}">
-        <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}" alt="Logo">
+        <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}" alt="Logotipo do Abrigo Santa Luzia">
         <h1>Dashboard</h1>
          </a>
    
@@ -1068,6 +1068,22 @@ document.addEventListener('DOMContentLoaded', function () {
             lista.style.display = 'block';
         }
     }
+
+    // Re-aplica máscaras quando abas são abertas (inputs podem estar ocultos no init)
+    document.querySelectorAll('.btn-tab, .aba-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (window.MascarasFormulario) {
+                setTimeout(window.MascarasFormulario.init, 50);
+            }
+        });
+    });
+    document.querySelectorAll('.btn-add[onclick]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (window.MascarasFormulario) {
+                setTimeout(window.MascarasFormulario.init, 50);
+            }
+        });
+    });
 });
 
 function buscarCep(input) {
@@ -1172,5 +1188,6 @@ document.addEventListener('click', function(event) {
 
 </script>
 
+    <x-accessibility-feedback />
 </body>
 </html>

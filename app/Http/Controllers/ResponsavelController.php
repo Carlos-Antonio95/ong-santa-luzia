@@ -30,12 +30,17 @@ class ResponsavelController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
+            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
+        ]);
+
         $data = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'rg' => ['nullable', 'string', 'max:20'],
             'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'max:14', 'unique:responsaveis,cpf'],
-            'telefone' => ['nullable', 'string', 'max:20'],
+            'cpf' => ['required', 'string', 'size:11', 'unique:responsaveis,cpf'],
+            'telefone' => ['nullable', 'string', 'max:11'],
             'endereco' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -60,12 +65,17 @@ class ResponsavelController extends Controller
 
     public function update(Request $request, Responsavel $responsavel)
     {
+        $request->merge([
+            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
+            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
+        ]);
+
         $data = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'rg' => ['nullable', 'string', 'max:20'],
             'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'max:14', 'unique:responsaveis,cpf,' . $responsavel->id],
-            'telefone' => ['nullable', 'string', 'max:20'],
+            'cpf' => ['required', 'string', 'size:11', 'unique:responsaveis,cpf,' . $responsavel->id],
+            'telefone' => ['nullable', 'string', 'max:11'],
             'endereco' => ['nullable', 'string', 'max:255'],
         ]);
 

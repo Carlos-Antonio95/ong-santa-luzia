@@ -44,7 +44,7 @@
 
         <!-- SOBRE / SERVIÇOS -->
         <section class="servicos">
-            <img src="{{ asset('imagens/Ícone minimalista de maleta verde.png') }}" alt="Profissionais" class="servico-img">
+            <img src="{{ asset('imagens/Ícone minimalista de maleta verde.png') }}" alt="Equipe de profissionais do abrigo" class="servico-img">
 
             <div class="container servico-texto">
                 <h2>Profissionais Capacitados</h2>
@@ -56,7 +56,7 @@
         </section>
 
         <section class="coração">
-            <img src="{{ asset('imagens/Coração verde simétrico em destaque.png') }}" alt="Coração" class="coração-img">
+            <img src="{{ asset('imagens/Coração verde simétrico em destaque.png') }}" alt="Ícone de cuidado e solidariedade" class="coração-img">
             <div class="container coração-texto">
                 <h2>Amor e Dedicação</h2>
                 <p>
@@ -66,7 +66,7 @@
         </section>
 
         <section class="remedio">
-            <img src="{{ asset('imagens/Ícone de cápsula verde.png') }}" alt="remedio" class="remedio-img">
+            <img src="{{ asset('imagens/Ícone de cápsula verde.png') }}" alt="Ícone de medicação e cuidado com a saúde" class="remedio-img">
             <div class="container remedio-texto">
                 <h2>Cuidados de Saúde</h2>
                 <p>
@@ -110,7 +110,7 @@
             <div class="cards">
 
                 <div class="card">
-                    <img src="{{ asset('imagens/brincando.jpg') }}" alt="Foto01" class="card-img">
+                    <img src="{{ asset('imagens/brincando.jpg') }}" alt="Atividade recreativa com residentes" class="card-img">
                     <div class="card-texto">
                         <h2>Atividades Recreativas</h2>
                         <p>
@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="{{ asset('imagens/mão de velho.png') }}" alt="Foto02" class="card-img">
+                    <img src="{{ asset('imagens/mão de velho.png') }}" alt="Mãos de uma pessoa idosa em destaque" class="card-img">
                     <div class="card-texto">
                         <h2>Cuidados Humanizados</h2>
                         <p>
@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="card">
-                    <img src="{{ asset('imagens/vó e neto.jpg') }}" alt="Foto03" class="card-img">
+                    <img src="{{ asset('imagens/vó e neto.jpg') }}" alt="Encontro entre avó e neto" class="card-img">
                     <div class="card-texto">
                         <h2>Saúde e Bem-estar</h2>
                         <p>
@@ -245,6 +245,7 @@
             });
         }
     </script>
+    <x-accessibility-feedback />
 </body>
 
 </html>

@@ -57,3 +57,5 @@
         @endif
     </div>
 </x-layouts::auth>
+
+<x-accessibility-feedback />

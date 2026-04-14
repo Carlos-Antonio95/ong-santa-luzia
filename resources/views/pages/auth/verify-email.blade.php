@@ -135,5 +135,6 @@
 }
 </style>
 
+    <x-accessibility-feedback />
 </body>
 </html>

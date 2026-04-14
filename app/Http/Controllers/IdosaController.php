@@ -35,18 +35,23 @@ class IdosaController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
+            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
+        ]);
+
         $data = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'data_nascimento' => ['nullable', 'date'],
             'estado_civil' => ['nullable', 'string', 'max:100'],
             'rg' => ['nullable', 'string', 'max:20'],
             'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'max:14', 'unique:idosas,cpf'],
+            'cpf' => ['required', 'string', 'size:11', 'unique:idosas,cpf'],
             'filiacao' => ['nullable', 'string', 'max:255'],
             'naturalidade' => ['nullable', 'string', 'max:255'],
             'deficiencia' => ['nullable', 'string', 'max:255'],
             'data_abrigamento' => ['nullable', 'date'],
-            'telefone' => ['nullable', 'string', 'max:20'],
+            'telefone' => ['nullable', 'string', 'max:11'],
             'endereco' => ['nullable', 'string', 'max:255'],
             'bairro' => ['nullable', 'string', 'max:255'],
             'cidade' => ['nullable', 'string', 'max:255'],
@@ -74,18 +79,23 @@ class IdosaController extends Controller
 
     public function update(Request $request, Idosa $idosa)
     {
+        $request->merge([
+            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
+            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
+        ]);
+
         $data = $request->validate([
             'nome' => ['required', 'string', 'max:255'],
             'data_nascimento' => ['nullable', 'date'],
             'estado_civil' => ['nullable', 'string', 'max:100'],
             'rg' => ['nullable', 'string', 'max:20'],
             'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'max:14', 'unique:idosas,cpf,' . $idosa->id],
+            'cpf' => ['required', 'string', 'size:11', 'unique:idosas,cpf,' . $idosa->id],
             'filiacao' => ['nullable', 'string', 'max:255'],
             'naturalidade' => ['nullable', 'string', 'max:255'],
             'deficiencia' => ['nullable', 'string', 'max:255'],
             'data_abrigamento' => ['nullable', 'date'],
-            'telefone' => ['nullable', 'string', 'max:20'],
+            'telefone' => ['nullable', 'string', 'max:11'],
             'endereco' => ['nullable', 'string', 'max:255'],
             'bairro' => ['nullable', 'string', 'max:255'],
             'cidade' => ['nullable', 'string', 'max:255'],
@@ -104,7 +114,7 @@ class IdosaController extends Controller
         $idosa->delete();
 
         return redirect()
-            ->route('/dashboard')
+            ->route('dashboard')
             ->with('success', 'Idosa removida com sucesso.');
     }
 
@@ -157,9 +167,7 @@ class IdosaController extends Controller
             $dadosAnoPassado[$indice] = (float) $item->total;
         }
     }
-    $settings = UserSetting::where('user_id', auth()->id())
-    ->pluck('value', 'key')
-    ->toArray();
+    $settings = [];
 
     return view('dashboard', compact(
         'idosas',

@@ -9,11 +9,11 @@
 <body>
 
 <header class="header">
-    <img src="{{ asset('imagens/logo-abrigo-santa-luzia.png') }}" class="logo">
+    <img src="{{ asset('imagens/logo-abrigo-santa-luzia.png') }}" alt="Logotipo do Abrigo Santa Luzia" class="logo">
 </header>
 
 <section class="hero">
-    <img src="{{ asset('imagens/hero.jpg') }}" class="hero-img">
+    <img src="{{ asset('imagens/hero.jpg') }}" alt="Imagem de acolhimento do Abrigo Santa Luzia" class="hero-img">
 
     <div class="hero-texto">
         <h1>Bem-vindo de volta 💚</h1>
@@ -33,5 +33,6 @@
     </form>
 </div>
 
+    <x-accessibility-feedback />
 </body>
 </html>

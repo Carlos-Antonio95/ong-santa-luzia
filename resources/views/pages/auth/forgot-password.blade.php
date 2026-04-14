@@ -168,5 +168,6 @@ input:invalid {
 }
 </style>
 
+    <x-accessibility-feedback />
 </body>
 </html>
