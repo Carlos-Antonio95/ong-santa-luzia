@@ -295,3 +295,50 @@ button.delete {
     border-radius: 6px;
     cursor: pointer;
 }
+/* ACESSIBILIDADE E CONTRASTE */
+body {
+  color: #111827;
+  line-height: 1.5;
+}
+
+.box p,
+.resumo-box,
+.submenu a,
+table td,
+table th,
+.grupo-campos label {
+  color: #111827;
+}
+
+.edit {
+  color: #ffffff;
+}
+
+.btn-add,
+.btn-tab,
+.delete,
+.edit,
+nav a,
+nav button,
+.menu-link {
+  font-weight: 700;
+}
+
+input,
+select,
+textarea,
+button,
+a {
+  border-radius: 8px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible,
+.menu-link:focus-visible {
+  outline: 3px solid #0f62fe;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.25);
+}

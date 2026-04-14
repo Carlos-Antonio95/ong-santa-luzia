@@ -538,3 +538,43 @@ header {
     margin-bottom: 0.3rem;
   }
 }
+/* ACESSIBILIDADE E CONTRASTE */
+body {
+  color: #111827;
+  line-height: 1.5;
+}
+
+.menu a,
+.nav a {
+  color: #f8fafc;
+}
+
+.hero-texto,
+.hero-texto h1,
+.hero-texto p,
+.servico-texto h2,
+.coração-texto h2,
+.remedio-texto h2 {
+  color: #ffffff;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid #6b7280;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #0f62fe;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.25);
+}
+
+.btn,
+.botao {
+  font-weight: 700;
+}

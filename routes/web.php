@@ -11,6 +11,8 @@ use App\Http\Controllers\DoacaoController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\UserSettingsController;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Rotas Públicas
