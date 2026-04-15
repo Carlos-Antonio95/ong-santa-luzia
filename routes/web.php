@@ -77,7 +77,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/register-user', [RegisterUserController::class, 'create'])->name('register.user');
     Route::post('/register-user', [RegisterUserController::class, 'store'])->name('register.user.store');
 
-   // Configurações do usuário (Sprint 4)
+   // Configurações do usuário
+   Route::get('/settings',  [UserSettingsController::class, 'index'])->name('settings.index');
    Route::post('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
 });
 

@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Idosa extends Model
 {
-    use SanitizesDocuments;
+    use SanitizesDocuments, SoftDeletes;
 
     protected $table = 'idosas';
 

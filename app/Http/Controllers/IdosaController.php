@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Idosa;
-use Illuminate\Http\Request;
-use App\Models\Doador;
+use App\Http\Requests\StoreIdosaRequest;
+use App\Http\Requests\UpdateIdosaRequest;
 use App\Models\Doacao;
-use App\Models\Voluntario;
-use Illuminate\Support\Facades\DB;
+use App\Models\Doador;
+use App\Models\Idosa;
 use App\Models\UserSetting;
+use App\Models\Voluntario;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IdosaController extends Controller
 {
@@ -33,31 +35,9 @@ class IdosaController extends Controller
         return view('idosas.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreIdosaRequest $request)
     {
-        $request->merge([
-            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
-            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
-        ]);
-
-        $data = $request->validate([
-            'nome' => ['required', 'string', 'max:255'],
-            'data_nascimento' => ['nullable', 'date'],
-            'estado_civil' => ['nullable', 'string', 'max:100'],
-            'rg' => ['nullable', 'string', 'max:20'],
-            'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'size:11', 'unique:idosas,cpf'],
-            'filiacao' => ['nullable', 'string', 'max:255'],
-            'naturalidade' => ['nullable', 'string', 'max:255'],
-            'deficiencia' => ['nullable', 'string', 'max:255'],
-            'data_abrigamento' => ['nullable', 'date'],
-            'telefone' => ['nullable', 'string', 'max:11'],
-            'endereco' => ['nullable', 'string', 'max:255'],
-            'bairro' => ['nullable', 'string', 'max:255'],
-            'cidade' => ['nullable', 'string', 'max:255'],
-            'nome_social' => ['nullable', 'string', 'max:255'],
-            'apelido' => ['nullable', 'string', 'max:255'],
-        ]);
+        $data = $request->validated();
 
         Idosa::create($data);
 
@@ -77,31 +57,9 @@ class IdosaController extends Controller
         return view('idosas.edit', compact('idosa'));
     }
 
-    public function update(Request $request, Idosa $idosa)
+    public function update(UpdateIdosaRequest $request, Idosa $idosa)
     {
-        $request->merge([
-            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
-            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
-        ]);
-
-        $data = $request->validate([
-            'nome' => ['required', 'string', 'max:255'],
-            'data_nascimento' => ['nullable', 'date'],
-            'estado_civil' => ['nullable', 'string', 'max:100'],
-            'rg' => ['nullable', 'string', 'max:20'],
-            'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'size:11', 'unique:idosas,cpf,' . $idosa->id],
-            'filiacao' => ['nullable', 'string', 'max:255'],
-            'naturalidade' => ['nullable', 'string', 'max:255'],
-            'deficiencia' => ['nullable', 'string', 'max:255'],
-            'data_abrigamento' => ['nullable', 'date'],
-            'telefone' => ['nullable', 'string', 'max:11'],
-            'endereco' => ['nullable', 'string', 'max:255'],
-            'bairro' => ['nullable', 'string', 'max:255'],
-            'cidade' => ['nullable', 'string', 'max:255'],
-            'nome_social' => ['nullable', 'string', 'max:255'],
-            'apelido' => ['nullable', 'string', 'max:255'],
-        ]);
+        $data = $request->validated();
 
         $idosa->update($data);
 
@@ -120,7 +78,9 @@ class IdosaController extends Controller
 
  public function dashboard(Request $request)
 {
-    $idosas = Idosa::with(['termos.responsavel'])->latest()->get();
+    // Limite de 500 registros para proteger a performance do dashboard.
+    // Para volumes maiores, migrar dropdowns para busca via AJAX.
+    $idosas = Idosa::with(['termos.responsavel'])->latest()->take(500)->get();
 
     $idosaSelecionada = null;
     if ($request->filled('idosa')) {
@@ -134,6 +94,7 @@ class IdosaController extends Controller
     $doadores = Doador::with('doacoes')
         ->withSum('doacoes', 'valor')
         ->latest()
+        ->take(500)
         ->get();
 
     $doadorSelecionado = null;
@@ -141,7 +102,7 @@ class IdosaController extends Controller
         $doadorSelecionado = Doador::with('doacoes')->findOrFail($request->doador);
     }
 
-    $voluntarios = Voluntario::latest()->get();
+    $voluntarios = Voluntario::latest()->take(500)->get();
     $voluntarioSelecionado = null;
     if ($request->filled('voluntario')) {
         $voluntarioSelecionado = Voluntario::findOrFail($request->voluntario);

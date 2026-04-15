@@ -64,5 +64,13 @@ class FortifyServiceProvider extends ServiceProvider
 
             return Limit::perMinute(5)->by($throttleKey);
         });
+
+        // Rate limiting para o endpoint de recuperação de senha customizado.
+        // Aplique via middleware throttle:password-recovery nas rotas.
+        RateLimiter::for('password-recovery', function (Request $request) {
+            return Limit::perMinute(3)->by(
+                Str::lower($request->input('email', '')).'|'.$request->ip()
+            );
+        });
     }
 }

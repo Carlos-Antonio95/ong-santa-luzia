@@ -12,10 +12,10 @@ return new class extends Migration
     {
         Schema::create('doadores', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('cpf')->nullable();
+            $table->string('nome')->index();
+            $table->string('cpf')->nullable()->index();
             $table->string('telefone')->nullable();
-            $table->string('email')->nullable();
+            $table->string('email')->nullable()->index();
             $table->string('tipo')->default('Pessoa Física');
             $table->text('observacoes')->nullable();
             $table->timestamps();

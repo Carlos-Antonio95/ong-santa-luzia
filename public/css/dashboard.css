@@ -1,13 +1,32 @@
+/* ── Variáveis de design ─────────────────────────────────────── */
+:root {
+    --cor-primaria:      #2ecc71;
+    --cor-primaria-dark: #27ae60;
+    --cor-fundo:         #f4f6f8;
+    --cor-texto:         #111827;
+    --cor-texto-suave:   #555;
+    --cor-fundo-card:    #ffffff;
+    --cor-borda:         #ddd;
+    --cor-header-ini:    #1f2020;
+    --cor-destaque:      #dfffe5;
+    --cor-editar:        #3498db;
+    --cor-excluir:       #e74c3c;
+    --cor-foco:          #0f62fe;
+    --raio:              8px;
+    --raio-card:         20px;
+    --sombra-card:       0 5px 20px rgba(0,0,0,.1);
+}
+
 /* RESET */
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #f4f6f8;
+    background: var(--cor-fundo);
 }
 
 /* HEADER */
 .header {
-    background: linear-gradient(90deg, #1f2020, #2ecc71);
+    background: linear-gradient(90deg, var(--cor-header-ini), var(--cor-primaria));
     color: white;
     padding: 15px 30px;
     display: flex;
@@ -72,7 +91,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #dfffe5;
+    color: var(--cor-destaque);
 }
 
 nav button {
@@ -89,7 +108,7 @@ nav button {
 }
 
 nav button:hover {
-    color: #dfffe5;
+    color: var(--cor-destaque);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -109,7 +128,7 @@ nav button:hover {
 }
 
 .menu-link:hover {
-    color: #dfffe5;
+    color: var(--cor-destaque);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -180,7 +199,7 @@ nav button:hover {
 /* NÚMEROS */
 .box h3 {
     font-size: 36px;
-    color: #2ecc71;
+    color: var(--cor-primaria);
     margin-bottom: 10px;
 }
 
@@ -202,7 +221,7 @@ nav button:hover {
         top: 100%;
         left: 0;
         right: 0;
-        background: linear-gradient(90deg, #1f2020, #2ecc71);
+        background: linear-gradient(90deg, var(--cor-header-ini), var(--cor-primaria));
         flex-direction: column;
         gap: 10px;
         padding: 20px;
@@ -243,7 +262,7 @@ table {
 }
 
 th {
-    background: #2ecc71;
+    background: var(--cor-primaria);
     color: white;
     padding: 10px;
 }
@@ -258,13 +277,21 @@ tr:hover {
 }
 
 .btn-add {
-    background: #2ecc71;
+    background: var(--cor-primaria);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    padding: 8px 13px;
+    border-radius: var(--raio);
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.4;
     cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn-add:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
 }
 
 .form-container {
@@ -279,7 +306,7 @@ tr:hover {
 }
 
 button.edit {
-    background: #3498db;
+    background: var(--cor-editar);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -288,7 +315,7 @@ button.edit {
 }
 
 button.delete {
-    background: #e74c3c;
+    background: var(--cor-excluir);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -338,7 +365,262 @@ textarea:focus-visible,
 button:focus-visible,
 a:focus-visible,
 .menu-link:focus-visible {
-  outline: 3px solid #0f62fe;
+  outline: 3px solid var(--cor-foco);
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.25);
+}
+
+/* ── RESPONSIVIDADE ADICIONAL ──────────────────────────────── */
+
+/* Tablet grande (1024px) */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        gap: 20px;
+    }
+
+    .box {
+        width: 180px;
+        padding: 20px;
+    }
+
+    .box h3 {
+        font-size: 28px;
+    }
+}
+
+/* Tablet pequeno (600px) */
+@media (max-width: 600px) {
+    .header {
+        padding: 12px 16px;
+    }
+
+    .logo-area h1 {
+        font-size: 1.1rem;
+    }
+
+    .dashboard h2 {
+        font-size: 22px;
+    }
+
+    .box {
+        width: 90%;
+        padding: 18px;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    th, td {
+        padding: 8px 6px;
+    }
+
+    button.edit,
+    button.delete {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    .lista-idosos {
+        width: 98%;
+        padding: 14px;
+    }
+}
+
+/* Mobile pequeno (400px) */
+@media (max-width: 400px) {
+    .logo-area img {
+        width: 44px;
+    }
+
+    .logo-area h1 {
+        font-size: 0.95rem;
+    }
+
+    .box h3 {
+        font-size: 22px;
+    }
+
+    th, td {
+        padding: 6px 4px;
+        font-size: 0.78rem;
+    }
+}
+
+/* ── Formulários estruturados ────────────────────────────────── */
+
+.form-section {
+    margin-bottom: 22px;
+}
+
+.form-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+    padding-bottom: 7px;
+    border-bottom: 2px solid var(--cor-primaria);
+}
+
+/* Wrapper de cada campo (label + input + erro) */
+.campo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.campo-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.campo-form input,
+.campo-form select,
+.campo-form textarea {
+    padding: 9px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: var(--raio);
+    font-family: inherit;
+    font-size: 0.93rem;
+    color: var(--cor-texto);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.campo-form input:focus,
+.campo-form select:focus,
+.campo-form textarea:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.18);
+}
+
+.campo-form input.erro,
+.campo-form select.erro,
+.campo-form textarea.erro {
+    border-color: var(--cor-excluir);
+}
+
+.campo-form input.erro:focus,
+.campo-form select.erro:focus,
+.campo-form textarea.erro:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.campo-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.erro-campo {
+    font-size: 0.78rem;
+    color: var(--cor-excluir);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* Asterisco de campo obrigatório */
+.req {
+    color: var(--cor-excluir);
+    margin-left: 2px;
+    font-weight: 700;
+}
+
+/* Linha de checkboxes */
+.linha-check {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.linha-check label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.linha-check input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--cor-primaria);
+    cursor: pointer;
+}
+
+/* Rodapé do formulário */
+.form-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Botão tipo âncora (substitui <a><button>) */
+a.btn-acao {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 13px;
+    border-radius: var(--raio);
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    border: none;
+    line-height: 1.4;
+}
+
+a.btn-acao:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+a.btn-acao.edit   { background: var(--cor-editar);      color: #fff; }
+a.btn-acao.green  { background: var(--cor-primaria);    color: #fff; }
+a.btn-acao.dark   { background: var(--cor-header-ini);  color: #fff; }
+a.btn-acao.danger { background: var(--cor-excluir);     color: #fff; }
+
+/* Botão cancelar (usado em <button type="button">) */
+button.btn-acao {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 13px;
+    border-radius: var(--raio);
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    border: none;
+    line-height: 1.4;
+    background: var(--cor-excluir);
+    color: #fff;
+}
+
+button.btn-acao:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+/* Aviso helper dentro do formulário */
+.form-hint {
+    font-size: 0.82rem;
+    color: #6b7280;
+    font-style: italic;
+    margin-bottom: 12px;
 }

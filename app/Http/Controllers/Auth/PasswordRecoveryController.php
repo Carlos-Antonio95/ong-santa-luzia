@@ -37,7 +37,16 @@ class PasswordRecoveryController extends Controller
             ]
         );
 
-        Mail::to($user->email)->send(new PasswordResetLinkMail($token, $email));
+        try {
+            Mail::to($user->email)->send(new PasswordResetLinkMail($token, $email));
+        } catch (\Throwable $e) {
+            \Log::error('Falha ao enviar e-mail de recuperação de senha.', [
+                'email' => $email,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => 'Não foi possível enviar o e-mail. Tente novamente mais tarde.'], 500);
+        }
 
         return response()->json(['message' => 'Link de recuperação enviado para o e-mail se existir no sistema.'], 200);
     }

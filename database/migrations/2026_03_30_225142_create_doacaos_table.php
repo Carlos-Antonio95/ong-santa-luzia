@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// Nota: o nome deste arquivo contém um erro de digitação ('doacaos').
+// A tabela criada está correta ('doacoes'). O arquivo não pode ser
+// renomeado sem resetar o banco, pois o Laravel rastreia pelo nome.
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('doacoes', function (Blueprint $table) {

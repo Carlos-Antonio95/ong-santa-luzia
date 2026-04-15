@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreResponsavelRequest;
+use App\Http\Requests\UpdateResponsavelRequest;
 use App\Models\Responsavel;
 use Illuminate\Http\Request;
 
@@ -28,21 +30,9 @@ class ResponsavelController extends Controller
         return view('responsaveis.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreResponsavelRequest $request)
     {
-        $request->merge([
-            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
-            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
-        ]);
-
-        $data = $request->validate([
-            'nome' => ['required', 'string', 'max:255'],
-            'rg' => ['nullable', 'string', 'max:20'],
-            'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'size:11', 'unique:responsaveis,cpf'],
-            'telefone' => ['nullable', 'string', 'max:11'],
-            'endereco' => ['nullable', 'string', 'max:255'],
-        ]);
+        $data = $request->validated();
 
         Responsavel::create($data);
 
@@ -63,21 +53,9 @@ class ResponsavelController extends Controller
         return view('responsaveis.edit', compact('responsavel'));
     }
 
-    public function update(Request $request, Responsavel $responsavel)
+    public function update(UpdateResponsavelRequest $request, Responsavel $responsavel)
     {
-        $request->merge([
-            'cpf'      => preg_replace('/\D+/', '', $request->input('cpf', '')),
-            'telefone' => preg_replace('/\D+/', '', $request->input('telefone', '')) ?: null,
-        ]);
-
-        $data = $request->validate([
-            'nome' => ['required', 'string', 'max:255'],
-            'rg' => ['nullable', 'string', 'max:20'],
-            'orgao_emissor' => ['nullable', 'string', 'max:50'],
-            'cpf' => ['required', 'string', 'size:11', 'unique:responsaveis,cpf,' . $responsavel->id],
-            'telefone' => ['nullable', 'string', 'max:11'],
-            'endereco' => ['nullable', 'string', 'max:255'],
-        ]);
+        $data = $request->validated();
 
         $responsavel->update($data);
 

@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class UserSettingsController extends Controller
 {
+    public function index(Request $request): \Illuminate\View\View
+    {
+        $user     = $request->user();
+        $rows     = UserSetting::where('user_id', $user->id)->get()->keyBy('key');
+        $settings = $rows->map(fn ($row) => $row->value)->toArray();
+
+        return view('settings.index', compact('settings'));
+    }
+
     public function update(UpdateUserSettingsRequest $request)
     {
         $user = $request->user();

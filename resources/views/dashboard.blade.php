@@ -344,28 +344,105 @@
                 @csrf
                 <input type="hidden" name="form_tipo" value="nova_idosa">
 
-                <div class="grupo-campos">
-                    <input type="text" name="nome" placeholder="Nome" value="{{ old('nome') }}" required>
-                    <input type="text" name="cpf" placeholder="CPF" value="{{ old('cpf') }}" required>
-                    <input type="text" name="telefone" placeholder="Telefone" value="{{ old('telefone') }}">
-                    <input type="text" name="cep" id="cep-nova" placeholder="CEP" value="{{ old('cep') }}" onblur="buscarCep(this)">
-                    <input type="date" name="data_nascimento" value="{{ old('data_nascimento') }}">
-                    <input type="text" name="estado_civil" placeholder="Estado Civil" value="{{ old('estado_civil') }}">
-                    <input type="text" name="rg" placeholder="RG" value="{{ old('rg') }}">
-                    <input type="text" name="orgao_emissor" placeholder="Órgão Emissor" value="{{ old('orgao_emissor') }}">
-                    <input type="text" name="filiacao" placeholder="Filiação" value="{{ old('filiacao') }}">
-                    <input type="text" name="naturalidade" placeholder="Naturalidade" value="{{ old('naturalidade') }}">
-                    <input type="text" name="deficiencia" placeholder="Deficiência" value="{{ old('deficiencia') }}">
-                    <input type="date" name="data_abrigamento" value="{{ old('data_abrigamento') }}">
-                    <input type="text" name="endereco" placeholder="Endereço" value="{{ old('endereco') }}">
-                    <input type="text" name="bairro" placeholder="Bairro" value="{{ old('bairro') }}">
-                    <input type="text" name="cidade" placeholder="Cidade" value="{{ old('cidade') }}">
-                    <input type="text" name="nome_social" placeholder="Nome Social" value="{{ old('nome_social') }}">
-                    <input type="text" name="apelido" placeholder="Apelido" value="{{ old('apelido') }}">
+                {{-- Dados Pessoais --}}
+                <div class="form-section">
+                    <h4 class="form-section-title">Dados Pessoais</h4>
+                    <div class="grupo-campos">
+                        <div class="campo-form">
+                            <label for="ni-nome">Nome completo <span class="req">*</span></label>
+                            <input type="text" id="ni-nome" name="nome" value="{{ old('nome') }}" required autocomplete="name" class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                            @error('nome')<span class="erro-campo">{{ $message }}</span>@enderror
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-cpf">CPF <span class="req">*</span></label>
+                            <input type="text" id="ni-cpf" name="cpf" value="{{ old('cpf') }}" required class="{{ $errors->has('cpf') ? 'erro' : '' }}">
+                            @error('cpf')<span class="erro-campo">{{ $message }}</span>@enderror
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-nascimento">Data de nascimento</label>
+                            <input type="date" id="ni-nascimento" name="data_nascimento" value="{{ old('data_nascimento') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-estado-civil">Estado civil</label>
+                            <select id="ni-estado-civil" name="estado_civil">
+                                <option value="">Selecione...</option>
+                                @foreach(['Solteira','Casada','Divorciada','Viúva','União Estável','Separada','Outro'] as $ec)
+                                    <option value="{{ $ec }}" {{ old('estado_civil') === $ec ? 'selected' : '' }}>{{ $ec }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-rg">RG</label>
+                            <input type="text" id="ni-rg" name="rg" value="{{ old('rg') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-orgao">Órgão emissor</label>
+                            <input type="text" id="ni-orgao" name="orgao_emissor" value="{{ old('orgao_emissor') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-filiacao">Filiação</label>
+                            <input type="text" id="ni-filiacao" name="filiacao" value="{{ old('filiacao') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-naturalidade">Naturalidade</label>
+                            <input type="text" id="ni-naturalidade" name="naturalidade" value="{{ old('naturalidade') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-nome-social">Nome social</label>
+                            <input type="text" id="ni-nome-social" name="nome_social" value="{{ old('nome_social') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-apelido">Apelido</label>
+                            <input type="text" id="ni-apelido" name="apelido" value="{{ old('apelido') }}">
+                        </div>
+                    </div>
                 </div>
 
-                <div style="margin-top:15px;">
+                {{-- Contato e Endereço --}}
+                <div class="form-section">
+                    <h4 class="form-section-title">Contato e Endereço</h4>
+                    <div class="grupo-campos">
+                        <div class="campo-form">
+                            <label for="ni-telefone">Telefone</label>
+                            <input type="text" id="ni-telefone" name="telefone" value="{{ old('telefone') }}" autocomplete="tel">
+                        </div>
+                        <div class="campo-form">
+                            <label for="cep-nova">CEP</label>
+                            <input type="text" id="cep-nova" name="cep" value="{{ old('cep') }}" onblur="buscarCep(this)" maxlength="9" placeholder="00000-000">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-endereco">Endereço</label>
+                            <input type="text" id="ni-endereco" name="endereco" value="{{ old('endereco') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-bairro">Bairro</label>
+                            <input type="text" id="ni-bairro" name="bairro" value="{{ old('bairro') }}">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-cidade">Cidade</label>
+                            <input type="text" id="ni-cidade" name="cidade" value="{{ old('cidade') }}">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Situação --}}
+                <div class="form-section">
+                    <h4 class="form-section-title">Situação no Abrigo</h4>
+                    <div class="grupo-campos">
+                        <div class="campo-form">
+                            <label for="ni-deficiencia">Deficiência / necessidade especial</label>
+                            <input type="text" id="ni-deficiencia" name="deficiencia" value="{{ old('deficiencia') }}" placeholder="Ex.: mobilidade reduzida">
+                        </div>
+                        <div class="campo-form">
+                            <label for="ni-abrigamento">Data de abrigamento</label>
+                            <input type="date" id="ni-abrigamento" name="data_abrigamento" value="{{ old('data_abrigamento') }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
                     <button type="submit" class="btn-add">Salvar Nova Idosa</button>
+                    <button type="button" class="btn-acao dark" onclick="toggleFormIdosa()">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -408,28 +485,102 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="grupo-campos">
-                            <input type="text" name="nome" value="{{ old('nome', $idosaSelecionada->nome) }}" placeholder="Nome" required>
-                            <input type="text" name="cpf" value="{{ old('cpf', $idosaSelecionada->cpf) }}" placeholder="CPF" required>
-                            <input type="text" name="telefone" value="{{ old('telefone', $idosaSelecionada->telefone) }}" placeholder="Telefone">
-                            <input type="text" name="cep" id="cep-editar" placeholder="CEP" value="{{ old('cep', '') }}" onblur="buscarCep(this)">
-                            <input type="date" name="data_nascimento" value="{{ old('data_nascimento', optional($idosaSelecionada->data_nascimento)->format('Y-m-d')) }}">
-                            <input type="text" name="estado_civil" value="{{ old('estado_civil', $idosaSelecionada->estado_civil) }}" placeholder="Estado Civil">
-                            <input type="text" name="rg" value="{{ old('rg', $idosaSelecionada->rg) }}" placeholder="RG">
-                            <input type="text" name="orgao_emissor" value="{{ old('orgao_emissor', $idosaSelecionada->orgao_emissor) }}" placeholder="Órgão Emissor">
-                            <input type="text" name="filiacao" value="{{ old('filiacao', $idosaSelecionada->filiacao) }}" placeholder="Filiação">
-                            <input type="text" name="naturalidade" value="{{ old('naturalidade', $idosaSelecionada->naturalidade) }}" placeholder="Naturalidade">
-                            <input type="text" name="deficiencia" value="{{ old('deficiencia', $idosaSelecionada->deficiencia) }}" placeholder="Deficiência">
-                            <input type="date" name="data_abrigamento" value="{{ old('data_abrigamento', optional($idosaSelecionada->data_abrigamento)->format('Y-m-d')) }}">
-                            <input type="text" name="endereco" value="{{ old('endereco', $idosaSelecionada->endereco) }}" placeholder="Endereço">
-                            <input type="text" name="bairro" value="{{ old('bairro', $idosaSelecionada->bairro) }}" placeholder="Bairro">
-                            <input type="text" name="cidade" value="{{ old('cidade', $idosaSelecionada->cidade) }}" placeholder="Cidade">
-                            <input type="text" name="nome_social" value="{{ old('nome_social', $idosaSelecionada->nome_social) }}" placeholder="Nome Social">
-                            <input type="text" name="apelido" value="{{ old('apelido', $idosaSelecionada->apelido) }}" placeholder="Apelido">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Dados Pessoais</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="ei-nome">Nome completo <span class="req">*</span></label>
+                                    <input type="text" id="ei-nome" name="nome" value="{{ old('nome', $idosaSelecionada->nome) }}" required autocomplete="name" class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                                    @error('nome')<span class="erro-campo">{{ $message }}</span>@enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-cpf">CPF <span class="req">*</span></label>
+                                    <input type="text" id="ei-cpf" name="cpf" value="{{ old('cpf', $idosaSelecionada->cpf) }}" required class="{{ $errors->has('cpf') ? 'erro' : '' }}">
+                                    @error('cpf')<span class="erro-campo">{{ $message }}</span>@enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-nascimento">Data de nascimento</label>
+                                    <input type="date" id="ei-nascimento" name="data_nascimento" value="{{ old('data_nascimento', optional($idosaSelecionada->data_nascimento)->format('Y-m-d')) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-estado-civil">Estado civil</label>
+                                    <select id="ei-estado-civil" name="estado_civil">
+                                        <option value="">Selecione...</option>
+                                        @foreach(['Solteira','Casada','Divorciada','Viúva','União Estável','Separada','Outro'] as $ec)
+                                            <option value="{{ $ec }}" {{ old('estado_civil', $idosaSelecionada->estado_civil) === $ec ? 'selected' : '' }}>{{ $ec }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-rg">RG</label>
+                                    <input type="text" id="ei-rg" name="rg" value="{{ old('rg', $idosaSelecionada->rg) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-orgao">Órgão emissor</label>
+                                    <input type="text" id="ei-orgao" name="orgao_emissor" value="{{ old('orgao_emissor', $idosaSelecionada->orgao_emissor) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-filiacao">Filiação</label>
+                                    <input type="text" id="ei-filiacao" name="filiacao" value="{{ old('filiacao', $idosaSelecionada->filiacao) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-naturalidade">Naturalidade</label>
+                                    <input type="text" id="ei-naturalidade" name="naturalidade" value="{{ old('naturalidade', $idosaSelecionada->naturalidade) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-nome-social">Nome social</label>
+                                    <input type="text" id="ei-nome-social" name="nome_social" value="{{ old('nome_social', $idosaSelecionada->nome_social) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-apelido">Apelido</label>
+                                    <input type="text" id="ei-apelido" name="apelido" value="{{ old('apelido', $idosaSelecionada->apelido) }}">
+                                </div>
+                            </div>
                         </div>
 
-                        <div style="margin-top:15px;">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Contato e Endereço</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="ei-telefone">Telefone</label>
+                                    <input type="text" id="ei-telefone" name="telefone" value="{{ old('telefone', $idosaSelecionada->telefone) }}" autocomplete="tel">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="cep-editar">CEP</label>
+                                    <input type="text" id="cep-editar" name="cep" value="{{ old('cep', '') }}" onblur="buscarCep(this)" maxlength="9" placeholder="00000-000">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-endereco">Endereço</label>
+                                    <input type="text" id="ei-endereco" name="endereco" value="{{ old('endereco', $idosaSelecionada->endereco) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-bairro">Bairro</label>
+                                    <input type="text" id="ei-bairro" name="bairro" value="{{ old('bairro', $idosaSelecionada->bairro) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-cidade">Cidade</label>
+                                    <input type="text" id="ei-cidade" name="cidade" value="{{ old('cidade', $idosaSelecionada->cidade) }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Situação no Abrigo</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="ei-deficiencia">Deficiência / necessidade especial</label>
+                                    <input type="text" id="ei-deficiencia" name="deficiencia" value="{{ old('deficiencia', $idosaSelecionada->deficiencia) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="ei-abrigamento">Data de abrigamento</label>
+                                    <input type="date" id="ei-abrigamento" name="data_abrigamento" value="{{ old('data_abrigamento', optional($idosaSelecionada->data_abrigamento)->format('Y-m-d')) }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
                             <button type="submit" class="btn-add">Salvar Cadastro</button>
+                            <a href="{{ route('dashboard') }}" class="btn-acao danger">Cancelar</a>
                         </div>
                     </form>
                 </div>
@@ -438,41 +589,109 @@
                     <form method="POST" action="{{ route('plano.storeOrUpdate', $idosaSelecionada->id) }}">
                         @csrf
 
-                        <div class="grupo-campos">
-                            <input type="date" name="data_ingresso" value="{{ old('data_ingresso', optional($idosaSelecionada->planoIndividual?->data_ingresso)->format('Y-m-d')) }}">
-                            <input type="text" name="numero_prontuario" value="{{ old('numero_prontuario', $idosaSelecionada->planoIndividual?->numero_prontuario) }}" placeholder="Número do prontuário">
-                            <input type="text" name="origem_residencia" value="{{ old('origem_residencia', $idosaSelecionada->planoIndividual?->origem_residencia) }}" placeholder="Origem da residência">
-                            <input type="number" step="0.01" name="renda" value="{{ old('renda', $idosaSelecionada->planoIndividual?->renda) }}" placeholder="Renda">
-                            <input type="text" name="escolaridade" value="{{ old('escolaridade', $idosaSelecionada->planoIndividual?->escolaridade) }}" placeholder="Escolaridade">
-                            <input type="text" name="profissao" value="{{ old('profissao', $idosaSelecionada->planoIndividual?->profissao) }}" placeholder="Profissão">
-                            <input type="text" name="religiao" value="{{ old('religiao', $idosaSelecionada->planoIndividual?->religiao) }}" placeholder="Religião">
-                            <input type="text" name="grau_dependencia" value="{{ old('grau_dependencia', $idosaSelecionada->planoIndividual?->grau_dependencia) }}" placeholder="Grau de dependência">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Dados de Ingresso</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="pi-data-ingresso">Data de ingresso</label>
+                                    <input type="date" id="pi-data-ingresso" name="data_ingresso" value="{{ old('data_ingresso', optional($idosaSelecionada->planoIndividual?->data_ingresso)->format('Y-m-d')) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-prontuario">Nº do prontuário</label>
+                                    <input type="text" id="pi-prontuario" name="numero_prontuario" value="{{ old('numero_prontuario', $idosaSelecionada->planoIndividual?->numero_prontuario) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-origem">Origem da residência</label>
+                                    <input type="text" id="pi-origem" name="origem_residencia" value="{{ old('origem_residencia', $idosaSelecionada->planoIndividual?->origem_residencia) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-motivo">Motivo da institucionalização</label>
+                                    <textarea id="pi-motivo" name="motivo_institucionalizacao">{{ old('motivo_institucionalizacao', $idosaSelecionada->planoIndividual?->motivo_institucionalizacao) }}</textarea>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="linha-checkbox">
-                            <label>
-                                <input type="checkbox" name="administra_financeiro" value="1"
-                                    {{ old('administra_financeiro', $idosaSelecionada->planoIndividual?->administra_financeiro) ? 'checked' : '' }}>
-                                Administra financeiro
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="possui_plano_saude" value="1"
-                                    {{ old('possui_plano_saude', $idosaSelecionada->planoIndividual?->possui_plano_saude) ? 'checked' : '' }}>
-                                Possui plano de saúde
-                            </label>
+                        <div class="form-section">
+                            <h4 class="form-section-title">Situação Social e Econômica</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="pi-renda">Renda (R$)</label>
+                                    <input type="number" step="0.01" min="0" id="pi-renda" name="renda" value="{{ old('renda', $idosaSelecionada->planoIndividual?->renda) }}" placeholder="0,00">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-escolaridade">Escolaridade</label>
+                                    <select id="pi-escolaridade" name="escolaridade">
+                                        <option value="">Selecione...</option>
+                                        @foreach(['Sem instrução','Fundamental incompleto','Fundamental completo','Médio incompleto','Médio completo','Superior incompleto','Superior completo','Pós-graduação'] as $esc)
+                                            <option value="{{ $esc }}" {{ old('escolaridade', $idosaSelecionada->planoIndividual?->escolaridade) === $esc ? 'selected' : '' }}>{{ $esc }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-profissao">Profissão</label>
+                                    <input type="text" id="pi-profissao" name="profissao" value="{{ old('profissao', $idosaSelecionada->planoIndividual?->profissao) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-religiao">Religião</label>
+                                    <input type="text" id="pi-religiao" name="religiao" value="{{ old('religiao', $idosaSelecionada->planoIndividual?->religiao) }}">
+                                </div>
+                            </div>
+                            <div class="linha-check" style="margin-top:10px;">
+                                <label>
+                                    <input type="checkbox" name="administra_financeiro" value="1"
+                                        {{ old('administra_financeiro', $idosaSelecionada->planoIndividual?->administra_financeiro) ? 'checked' : '' }}>
+                                    Administra o próprio financeiro
+                                </label>
+                            </div>
                         </div>
 
-                        <div class="grupo-campos">
-                            <textarea name="motivo_institucionalizacao" placeholder="Motivo da institucionalização">{{ old('motivo_institucionalizacao', $idosaSelecionada->planoIndividual?->motivo_institucionalizacao) }}</textarea>
-                            <textarea name="diagnostico_medico" placeholder="Diagnóstico médico">{{ old('diagnostico_medico', $idosaSelecionada->planoIndividual?->diagnostico_medico) }}</textarea>
-                            <textarea name="descricao_medicacao" placeholder="Descrição da medicação">{{ old('descricao_medicacao', $idosaSelecionada->planoIndividual?->descricao_medicacao) }}</textarea>
-                            <textarea name="restricao_alimentar" placeholder="Restrição alimentar">{{ old('restricao_alimentar', $idosaSelecionada->planoIndividual?->restricao_alimentar) }}</textarea>
-                            <textarea name="rotina" placeholder="Rotina">{{ old('rotina', $idosaSelecionada->planoIndividual?->rotina) }}</textarea>
+                        <div class="form-section">
+                            <h4 class="form-section-title">Saúde</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="pi-diagnostico">Diagnóstico médico</label>
+                                    <textarea id="pi-diagnostico" name="diagnostico_medico">{{ old('diagnostico_medico', $idosaSelecionada->planoIndividual?->diagnostico_medico) }}</textarea>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-grau">Grau de dependência</label>
+                                    <select id="pi-grau" name="grau_dependencia">
+                                        <option value="">Selecione...</option>
+                                        @foreach(['Independente','Parcialmente dependente','Totalmente dependente'] as $gd)
+                                            <option value="{{ $gd }}" {{ old('grau_dependencia', $idosaSelecionada->planoIndividual?->grau_dependencia) === $gd ? 'selected' : '' }}>{{ $gd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-medicacao">Descrição da medicação</label>
+                                    <textarea id="pi-medicacao" name="descricao_medicacao">{{ old('descricao_medicacao', $idosaSelecionada->planoIndividual?->descricao_medicacao) }}</textarea>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="pi-restricao">Restrição alimentar</label>
+                                    <textarea id="pi-restricao" name="restricao_alimentar">{{ old('restricao_alimentar', $idosaSelecionada->planoIndividual?->restricao_alimentar) }}</textarea>
+                                </div>
+                            </div>
+                            <div class="linha-check" style="margin-top:10px;">
+                                <label>
+                                    <input type="checkbox" name="possui_plano_saude" value="1"
+                                        {{ old('possui_plano_saude', $idosaSelecionada->planoIndividual?->possui_plano_saude) ? 'checked' : '' }}>
+                                    Possui plano de saúde
+                                </label>
+                            </div>
                         </div>
 
-                        <div style="margin-top:15px;">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Rotina</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="pi-rotina">Descrição da rotina</label>
+                                    <textarea id="pi-rotina" name="rotina" style="min-height:110px;">{{ old('rotina', $idosaSelecionada->planoIndividual?->rotina) }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
                             <button type="submit" class="btn-add">Salvar Plano Individual</button>
+                            <button type="button" class="btn-acao dark" onclick="mostrarAbaIdosa('aba-dados')">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -481,42 +700,76 @@
                     <form method="POST" action="{{ route('termo.storeOrUpdate', $idosaSelecionada->id) }}">
                         @csrf
 
-                        <div class="grupo-campos">
-                            <input type="text" name="responsavel_nome" value="{{ old('responsavel_nome', $idosaSelecionada->ultimoTermo?->responsavel?->nome) }}" placeholder="Nome do responsável" required>
-                            <input type="text" name="responsavel_cpf" value="{{ old('responsavel_cpf', $idosaSelecionada->ultimoTermo?->responsavel?->cpf) }}" placeholder="CPF do responsável" required>
-                            <input type="text" name="responsavel_rg" value="{{ old('responsavel_rg', $idosaSelecionada->ultimoTermo?->responsavel?->rg) }}" placeholder="RG do responsável">
-                            <input type="text" name="responsavel_orgao_emissor" value="{{ old('responsavel_orgao_emissor', $idosaSelecionada->ultimoTermo?->responsavel?->orgao_emissor) }}" placeholder="Órgão emissor">
-                            <input type="text" name="responsavel_telefone" value="{{ old('responsavel_telefone', $idosaSelecionada->ultimoTermo?->responsavel?->telefone) }}" placeholder="Telefone do responsável">
-                            <input type="text" name="responsavel_endereco" value="{{ old('responsavel_endereco', $idosaSelecionada->ultimoTermo?->responsavel?->endereco) }}" placeholder="Endereço do responsável">
-                            <input type="date" name="data_inicio" value="{{ old('data_inicio', optional($idosaSelecionada->ultimoTermo?->data_inicio)->format('Y-m-d')) }}">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Dados do Responsável</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="tr-resp-nome">Nome do responsável <span class="req">*</span></label>
+                                    <input type="text" id="tr-resp-nome" name="responsavel_nome" value="{{ old('responsavel_nome', $idosaSelecionada->ultimoTermo?->responsavel?->nome) }}" required class="{{ $errors->has('responsavel_nome') ? 'erro' : '' }}">
+                                    @error('responsavel_nome')<span class="erro-campo">{{ $message }}</span>@enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-resp-cpf">CPF do responsável <span class="req">*</span></label>
+                                    <input type="text" id="tr-resp-cpf" name="responsavel_cpf" value="{{ old('responsavel_cpf', $idosaSelecionada->ultimoTermo?->responsavel?->cpf) }}" required class="{{ $errors->has('responsavel_cpf') ? 'erro' : '' }}">
+                                    @error('responsavel_cpf')<span class="erro-campo">{{ $message }}</span>@enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-resp-rg">RG do responsável</label>
+                                    <input type="text" id="tr-resp-rg" name="responsavel_rg" value="{{ old('responsavel_rg', $idosaSelecionada->ultimoTermo?->responsavel?->rg) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-resp-orgao">Órgão emissor</label>
+                                    <input type="text" id="tr-resp-orgao" name="responsavel_orgao_emissor" value="{{ old('responsavel_orgao_emissor', $idosaSelecionada->ultimoTermo?->responsavel?->orgao_emissor) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-resp-tel">Telefone do responsável</label>
+                                    <input type="text" id="tr-resp-tel" name="responsavel_telefone" value="{{ old('responsavel_telefone', $idosaSelecionada->ultimoTermo?->responsavel?->telefone) }}" autocomplete="tel">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-resp-end">Endereço do responsável</label>
+                                    <input type="text" id="tr-resp-end" name="responsavel_endereco" value="{{ old('responsavel_endereco', $idosaSelecionada->ultimoTermo?->responsavel?->endereco) }}">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="linha-checkbox">
-                            <label>
-                                <input type="checkbox" name="assinado_responsavel" value="1"
-                                    {{ old('assinado_responsavel', $idosaSelecionada->ultimoTermo?->assinado_responsavel) ? 'checked' : '' }}>
-                                Assinado responsável
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="assinado_psicologo" value="1"
-                                    {{ old('assinado_psicologo', $idosaSelecionada->ultimoTermo?->assinado_psicologo) ? 'checked' : '' }}>
-                                Assinado psicólogo
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="assinado_assistente_social" value="1"
-                                    {{ old('assinado_assistente_social', $idosaSelecionada->ultimoTermo?->assinado_assistente_social) ? 'checked' : '' }}>
-                                Assinado assistente social
-                            </label>
+                        <div class="form-section">
+                            <h4 class="form-section-title">Termo de Abrigamento</h4>
+                            <div class="grupo-campos">
+                                <div class="campo-form">
+                                    <label for="tr-data-inicio">Data de início</label>
+                                    <input type="date" id="tr-data-inicio" name="data_inicio" value="{{ old('data_inicio', optional($idosaSelecionada->ultimoTermo?->data_inicio)->format('Y-m-d')) }}">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="tr-observacoes">Observações</label>
+                                    <textarea id="tr-observacoes" name="observacoes">{{ old('observacoes', $idosaSelecionada->ultimoTermo?->observacoes) }}</textarea>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grupo-campos">
-                            <textarea name="observacoes" placeholder="Observações">{{ old('observacoes', $idosaSelecionada->ultimoTermo?->observacoes) }}</textarea>
+                        <div class="form-section">
+                            <h4 class="form-section-title">Assinaturas</h4>
+                            <div class="linha-check">
+                                <label>
+                                    <input type="checkbox" name="assinado_responsavel" value="1"
+                                        {{ old('assinado_responsavel', $idosaSelecionada->ultimoTermo?->assinado_responsavel) ? 'checked' : '' }}>
+                                    Responsável assinou
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="assinado_psicologo" value="1"
+                                        {{ old('assinado_psicologo', $idosaSelecionada->ultimoTermo?->assinado_psicologo) ? 'checked' : '' }}>
+                                    Psicólogo assinou
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="assinado_assistente_social" value="1"
+                                        {{ old('assinado_assistente_social', $idosaSelecionada->ultimoTermo?->assinado_assistente_social) ? 'checked' : '' }}>
+                                    Assistente social assinou
+                                </label>
+                            </div>
                         </div>
 
-                        <div style="margin-top:15px;">
+                        <div class="form-actions">
                             <button type="submit" class="btn-add">Salvar Termo de Abrigamento</button>
+                            <button type="button" class="btn-acao dark" onclick="mostrarAbaIdosa('aba-dados')">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -558,13 +811,8 @@
                             </td>
                             <td>
                                 <div class="acoes-linha">
-                                    <a href="{{ route('idosas.show', $idosa->id) }}">
-                                        <button class="edit" type="button">Abrir</button>
-                                    </a>
-
-                                    <a href="{{ route('dashboard', ['idosa' => $idosa->id]) }}">
-                                        <button class="edit" type="button">Editar</button>
-                                    </a>
+                                    <a href="{{ route('idosas.show', $idosa->id) }}" class="btn-acao edit">Abrir</a>
+                                    <a href="{{ route('dashboard', ['idosa' => $idosa->id]) }}" class="btn-acao edit">Editar</a>
 
                                     <form method="POST" action="{{ route('idosas.destroy', $idosa->id) }}" onsubmit="return confirm('Deseja realmente excluir esta idosa?')">
                                         @csrf
@@ -605,47 +853,78 @@
 
                 <!-- Aba Cadastro -->
                 <div id="aba-novo-doador-cadastro" class="aba-edicao ativa">
-                    <div class="grupo-campos">
-                        <input type="text" name="nome" placeholder="Nome do doador" value="{{ old('nome') }}" required>
-                        <input type="text" name="cpf" placeholder="CPF" value="{{ old('cpf') }}">
-                        <input type="text" name="telefone" placeholder="Telefone" value="{{ old('telefone') }}">
-                        <input type="email" name="email" placeholder="E-mail" value="{{ old('email') }}">
-                        <select name="tipo">
-                            <option value="Pessoa Física" {{ old('tipo') == 'Pessoa Física' ? 'selected' : '' }}>Pessoa Física</option>
-                            <option value="Empresa" {{ old('tipo') == 'Empresa' ? 'selected' : '' }}>Empresa</option>
-                        </select>
-                    </div>
-
-                    <div class="grupo-campos">
-                        <textarea name="observacoes" placeholder="Observações">{{ old('observacoes') }}</textarea>
+                    <div class="form-section">
+                        <h4 class="form-section-title">Dados do Doador</h4>
+                        <div class="grupo-campos">
+                            <div class="campo-form">
+                                <label for="nd-nome">Nome <span class="req">*</span></label>
+                                <input type="text" id="nd-nome" name="nome" value="{{ old('nome') }}" required class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                                @error('nome')<span class="erro-campo">{{ $message }}</span>@enderror
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-tipo">Tipo</label>
+                                <select id="nd-tipo" name="tipo">
+                                    <option value="Pessoa Física" {{ old('tipo') == 'Pessoa Física' ? 'selected' : '' }}>Pessoa Física</option>
+                                    <option value="Empresa" {{ old('tipo') == 'Empresa' ? 'selected' : '' }}>Empresa</option>
+                                </select>
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-cpf">CPF / CNPJ</label>
+                                <input type="text" id="nd-cpf" name="cpf" value="{{ old('cpf') }}">
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-telefone">Telefone</label>
+                                <input type="text" id="nd-telefone" name="telefone" value="{{ old('telefone') }}" autocomplete="tel">
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-email">E-mail</label>
+                                <input type="email" id="nd-email" name="email" value="{{ old('email') }}" autocomplete="email">
+                            </div>
+                            <div class="campo-form" style="min-width:100%;">
+                                <label for="nd-observacoes">Observações</label>
+                                <textarea id="nd-observacoes" name="observacoes">{{ old('observacoes') }}</textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Aba Doação -->
                 <div id="aba-novo-doador-doacao" class="aba-edicao">
-                    <p style="color: #666; margin-bottom: 10px; font-size: 0.9em;">Preencha os dados abaixo se deseja registrar uma doação junto ao cadastro do doador. Todos os campos desta seção são opcionais.</p>
-                    
-                    <div class="grupo-campos">
-                        <input type="number" step="0.01" min="0.01" name="doacao_valor" placeholder="Valor da doação" value="{{ old('doacao_valor') }}">
-                        <input type="date" name="doacao_data" value="{{ old('doacao_data') }}">
-                        <input type="text" name="doacao_forma_pagamento" placeholder="Forma de pagamento" value="{{ old('doacao_forma_pagamento') }}">
-                        <select name="doacao_tipo">
-                        <option value="Financeira" {{ old('doacao_tipo') == 'Financeira' ? 'selected' : '' }}>Financeira</option>
-                        <option value="Alimentos" {{ old('doacao_tipo') == 'Alimentos' ? 'selected' : '' }}>Alimentos</option>
-                        <option value="Roupas" {{ old('doacao_tipo') == 'Roupas' ? 'selected' : '' }}>Roupas</option>
-                        <option value="Medicamentos" {{ old('doacao_tipo') == 'Medicamentos' ? 'selected' : '' }}>Medicamentos</option>
-                        <option value="Higiene" {{ old('doacao_tipo') == 'Higiene' ? 'selected' : '' }}>Higiene</option>
-                        <option value="Outros" {{ old('doacao_tipo') == 'Outros' ? 'selected' : '' }}>Outros</option>
-                    </select>
-                    </div>
-
-                    <div class="grupo-campos">
-                        <textarea name="doacao_descricao" placeholder="Descrição da doação">{{ old('doacao_descricao') }}</textarea>
+                    <p class="form-hint">Preencha os campos abaixo para registrar uma doação junto ao cadastro. Todos são opcionais.</p>
+                    <div class="form-section">
+                        <h4 class="form-section-title">Dados da Doação (opcional)</h4>
+                        <div class="grupo-campos">
+                            <div class="campo-form">
+                                <label for="nd-doacao-valor">Valor (R$)</label>
+                                <input type="number" step="0.01" min="0.01" id="nd-doacao-valor" name="doacao_valor" value="{{ old('doacao_valor') }}" placeholder="0,00">
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-doacao-data">Data da doação</label>
+                                <input type="date" id="nd-doacao-data" name="doacao_data" value="{{ old('doacao_data') }}">
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-doacao-forma">Forma de pagamento</label>
+                                <input type="text" id="nd-doacao-forma" name="doacao_forma_pagamento" value="{{ old('doacao_forma_pagamento') }}" placeholder="Ex.: Pix, Dinheiro">
+                            </div>
+                            <div class="campo-form">
+                                <label for="nd-doacao-tipo">Tipo de doação</label>
+                                <select id="nd-doacao-tipo" name="doacao_tipo">
+                                    @foreach(['Financeira','Alimentos','Roupas','Medicamentos','Higiene','Outros'] as $td)
+                                        <option value="{{ $td }}" {{ old('doacao_tipo') == $td ? 'selected' : '' }}>{{ $td }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="campo-form" style="min-width:100%;">
+                                <label for="nd-doacao-desc">Descrição</label>
+                                <textarea id="nd-doacao-desc" name="doacao_descricao">{{ old('doacao_descricao') }}</textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div style="margin-top:15px;">
+                <div class="form-actions">
                     <button type="submit" class="btn-add">Salvar Novo Doador</button>
+                    <button type="button" class="btn-acao dark" onclick="toggleFormDoador()">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -687,23 +966,68 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="grupo-campos">
-                            <input type="text" name="nome" value="{{ old('nome', $doadorSelecionado->nome) }}" placeholder="Nome" required>
-                            <input type="text" name="cpf" value="{{ old('cpf', $doadorSelecionado->cpf) }}" placeholder="CPF">
-                            <input type="text" name="telefone" value="{{ old('telefone', $doadorSelecionado->telefone) }}" placeholder="Telefone">
-                            <input type="email" name="email" value="{{ old('email', $doadorSelecionado->email) }}" placeholder="E-mail">
-                            <select name="tipo">
-                                <option value="Pessoa Física" {{ old('tipo', $doadorSelecionado->tipo) == 'Pessoa Física' ? 'selected' : '' }}>Pessoa Física</option>
-                                <option value="Empresa" {{ old('tipo', $doadorSelecionado->tipo) == 'Empresa' ? 'selected' : '' }}>Empresa</option>
-                            </select>
+                        <div class="form-section">
+                            <p class="form-section-title">Identificação</p>
+                            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                <div class="campo-form" style="flex:2; min-width:200px;">
+                                    <label for="edit-doador-nome">Nome <span class="req" aria-hidden="true">*</span></label>
+                                    <input type="text" id="edit-doador-nome" name="nome"
+                                           value="{{ old('nome', $doadorSelecionado->nome) }}"
+                                           required class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                                    @error('nome') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                                <div class="campo-form" style="flex:1; min-width:160px;">
+                                    <label for="edit-doador-tipo">Tipo</label>
+                                    <select id="edit-doador-tipo" name="tipo">
+                                        @foreach(['Pessoa Física','Empresa'] as $t)
+                                            <option value="{{ $t }}" {{ old('tipo', $doadorSelecionado->tipo) == $t ? 'selected' : '' }}>{{ $t }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('tipo') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grupo-campos">
-                            <textarea name="observacoes" placeholder="Observações">{{ old('observacoes', $doadorSelecionado->observacoes) }}</textarea>
+                        <div class="form-section">
+                            <p class="form-section-title">Contato</p>
+                            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                <div class="campo-form">
+                                    <label for="edit-doador-cpf">CPF</label>
+                                    <input type="text" id="edit-doador-cpf" name="cpf"
+                                           value="{{ old('cpf', $doadorSelecionado->cpf) }}"
+                                           placeholder="000.000.000-00" maxlength="14"
+                                           class="{{ $errors->has('cpf') ? 'erro' : '' }}">
+                                    @error('cpf') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="edit-doador-telefone">Telefone</label>
+                                    <input type="text" id="edit-doador-telefone" name="telefone"
+                                           value="{{ old('telefone', $doadorSelecionado->telefone) }}"
+                                           placeholder="(00) 00000-0000" maxlength="15"
+                                           class="{{ $errors->has('telefone') ? 'erro' : '' }}">
+                                    @error('telefone') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                                <div class="campo-form" style="flex:2;">
+                                    <label for="edit-doador-email">E-mail</label>
+                                    <input type="email" id="edit-doador-email" name="email"
+                                           value="{{ old('email', $doadorSelecionado->email) }}"
+                                           class="{{ $errors->has('email') ? 'erro' : '' }}">
+                                    @error('email') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
-                        <div style="margin-top:15px;">
+                        <div class="form-section">
+                            <p class="form-section-title">Observações</p>
+                            <div class="campo-form">
+                                <label for="edit-doador-obs">Observações</label>
+                                <textarea id="edit-doador-obs" name="observacoes">{{ old('observacoes', $doadorSelecionado->observacoes) }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
                             <button type="submit" class="btn-add">Salvar Doador</button>
+                            <a href="{{ route('dashboard') }}" class="btn-acao danger">Cancelar</a>
                         </div>
                     </form>
                 </div>
@@ -712,26 +1036,52 @@
                     <form method="POST" action="{{ route('doacoes.store', $doadorSelecionado->id) }}">
                         @csrf
 
-                        <div class="grupo-campos">
-                            <input type="number" step="0.01" min="0.01" name="valor" placeholder="Valor da doação" required>
-                            <input type="date" name="data_doacao" value="{{ date('Y-m-d') }}" required>
-                            <input type="text" name="forma_pagamento" placeholder="Forma de pagamento">
-                            <select name="tipo_doacao">
-                                <option value="Financeira">Financeira</option>
-                                <option value="Alimentos">Alimentos</option>
-                                <option value="Roupas">Roupas</option>
-                                <option value="Medicamentos">Medicamentos</option>
-                                <option value="Higiene">Higiene</option>
-                                <option value="Outros">Outros</option>
-                            </select>
+                        <div class="form-section">
+                            <p class="form-section-title">Nova Doação</p>
+                            <p class="form-hint">Preencha os dados da doação recebida.</p>
+                            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                <div class="campo-form">
+                                    <label for="doacao-valor">Valor <span class="req" aria-hidden="true">*</span></label>
+                                    <input type="number" id="doacao-valor" name="valor"
+                                           step="0.01" min="0.01" placeholder="0,00" required
+                                           class="{{ $errors->has('valor') ? 'erro' : '' }}">
+                                    @error('valor') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="doacao-data">Data <span class="req" aria-hidden="true">*</span></label>
+                                    <input type="date" id="doacao-data" name="data_doacao"
+                                           value="{{ date('Y-m-d') }}" required
+                                           class="{{ $errors->has('data_doacao') ? 'erro' : '' }}">
+                                    @error('data_doacao') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                </div>
+                                <div class="campo-form">
+                                    <label for="doacao-tipo">Tipo de Doação</label>
+                                    <select id="doacao-tipo" name="tipo_doacao">
+                                        @foreach(['Financeira','Alimentos','Roupas','Medicamentos','Higiene','Outros'] as $td)
+                                            <option value="{{ $td }}" {{ old('tipo_doacao') == $td ? 'selected' : '' }}>{{ $td }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="campo-form">
+                                    <label for="doacao-forma">Forma de Pagamento</label>
+                                    <input type="text" id="doacao-forma" name="forma_pagamento"
+                                           value="{{ old('forma_pagamento') }}"
+                                           placeholder="Ex.: Transferência, Dinheiro...">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grupo-campos">
-                            <textarea name="descricao" placeholder="Descrição da doação"></textarea>
+                        <div class="form-section">
+                            <p class="form-section-title">Detalhes</p>
+                            <div class="campo-form">
+                                <label for="doacao-descricao">Descrição</label>
+                                <textarea id="doacao-descricao" name="descricao" placeholder="Descrição da doação">{{ old('descricao') }}</textarea>
+                            </div>
                         </div>
 
-                        <div style="margin-top:15px;">
+                        <div class="form-actions">
                             <button type="submit" class="btn-add">Salvar Doação</button>
+                            <button type="button" class="btn-acao dark" onclick="mostrarAbaDoador('aba-doador-cadastro')">Cancelar</button>
                         </div>
                     </form>
 
@@ -739,11 +1089,11 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="color:black;">Data</th>
-                                    <th style="color:black;">Valor</th>
-                                    <th style="color:black;">Forma</th>
-                                    <th style="color:black;">Tipo</th>
-                                    <th style="color:black;">Descrição</th>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Forma</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -788,10 +1138,7 @@
                             <td>{{ $doador->doacoes->count() }}</td>
                             <td>
                                 <div class="acoes-linha">
-                                    <a href="{{ route('dashboard', ['doador' => $doador->id]) }}">
-                                        <button class="edit" type="button">Editar</button>
-                                    </a>
-
+                                    <a href="{{ route('dashboard', ['doador' => $doador->id]) }}" class="btn-acao edit">Editar</a>
                                     <form method="POST" action="{{ route('doadores.destroy', $doador->id) }}" onsubmit="return confirm('Deseja realmente excluir este doador?')">
                                         @csrf
                                         @method('DELETE')
@@ -822,20 +1169,60 @@
                     @csrf
                     <input type="hidden" name="form_tipo" value="novo_voluntario">
 
-                    <div class="grupo-campos">
-                        <input type="text" name="nome" placeholder="Nome" value="{{ old('nome') }}" required>
-                        <input type="email" name="email" placeholder="E-mail" value="{{ old('email') }}" required>
-                        <input type="text" name="telefone" placeholder="Telefone" value="{{ old('telefone') }}">
-                        <input type="date" name="data_nascimento" value="{{ old('data_nascimento') }}">
-                        <input type="text" name="skills" placeholder="Habilidades / skills" value="{{ old('skills') }}">
+                    <div class="form-section">
+                        <p class="form-section-title">Dados Pessoais</p>
+                        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                            <div class="campo-form" style="flex:2; min-width:200px;">
+                                <label for="novo-vol-nome">Nome <span class="req" aria-hidden="true">*</span></label>
+                                <input type="text" id="novo-vol-nome" name="nome"
+                                       value="{{ old('nome') }}" required
+                                       class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                                @error('nome') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                            </div>
+                            <div class="campo-form">
+                                <label for="novo-vol-nasc">Data de Nascimento</label>
+                                <input type="date" id="novo-vol-nasc" name="data_nascimento"
+                                       value="{{ old('data_nascimento') }}">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="grupo-campos">
-                        <textarea name="observacoes" placeholder="Observações">{{ old('observacoes') }}</textarea>
+                    <div class="form-section">
+                        <p class="form-section-title">Contato</p>
+                        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                            <div class="campo-form" style="flex:2;">
+                                <label for="novo-vol-email">E-mail <span class="req" aria-hidden="true">*</span></label>
+                                <input type="email" id="novo-vol-email" name="email"
+                                       value="{{ old('email') }}" required
+                                       class="{{ $errors->has('email') ? 'erro' : '' }}">
+                                @error('email') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                            </div>
+                            <div class="campo-form">
+                                <label for="novo-vol-tel">Telefone</label>
+                                <input type="text" id="novo-vol-tel" name="telefone"
+                                       value="{{ old('telefone') }}"
+                                       placeholder="(00) 00000-0000" maxlength="15">
+                            </div>
+                        </div>
                     </div>
 
-                    <div style="margin-top:15px;">
+                    <div class="form-section">
+                        <p class="form-section-title">Perfil</p>
+                        <div class="campo-form" style="margin-bottom:12px;">
+                            <label for="novo-vol-skills">Habilidades / Skills</label>
+                            <input type="text" id="novo-vol-skills" name="skills"
+                                   value="{{ old('skills') }}"
+                                   placeholder="Ex.: cozinha, enfermagem, música...">
+                        </div>
+                        <div class="campo-form">
+                            <label for="novo-vol-obs">Observações</label>
+                            <textarea id="novo-vol-obs" name="observacoes">{{ old('observacoes') }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
                         <button type="submit" class="btn-add">Salvar Novo Voluntário</button>
+                        <button type="button" class="btn-acao dark" onclick="toggleFormVoluntario()">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -864,20 +1251,60 @@
                             @csrf
                             @method('PUT')
 
-                            <div class="grupo-campos">
-                                <input type="text" name="nome" value="{{ old('nome', $voluntarioSelecionado->nome) }}" placeholder="Nome" required>
-                                <input type="email" name="email" value="{{ old('email', $voluntarioSelecionado->email) }}" placeholder="E-mail" required>
-                                <input type="text" name="telefone" value="{{ old('telefone', $voluntarioSelecionado->telefone) }}" placeholder="Telefone">
-                                <input type="date" name="data_nascimento" value="{{ old('data_nascimento', optional($voluntarioSelecionado->data_nascimento)->format('Y-m-d')) }}">
-                                <input type="text" name="skills" value="{{ old('skills', $voluntarioSelecionado->skills) }}" placeholder="Habilidades / skills">
+                            <div class="form-section">
+                                <p class="form-section-title">Dados Pessoais</p>
+                                <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                    <div class="campo-form" style="flex:2; min-width:200px;">
+                                        <label for="edit-vol-nome">Nome <span class="req" aria-hidden="true">*</span></label>
+                                        <input type="text" id="edit-vol-nome" name="nome"
+                                               value="{{ old('nome', $voluntarioSelecionado->nome) }}" required
+                                               class="{{ $errors->has('nome') ? 'erro' : '' }}">
+                                        @error('nome') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="campo-form">
+                                        <label for="edit-vol-nasc">Data de Nascimento</label>
+                                        <input type="date" id="edit-vol-nasc" name="data_nascimento"
+                                               value="{{ old('data_nascimento', optional($voluntarioSelecionado->data_nascimento)->format('Y-m-d')) }}">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="grupo-campos">
-                                <textarea name="observacoes" placeholder="Observações">{{ old('observacoes', $voluntarioSelecionado->observacoes) }}</textarea>
+                            <div class="form-section">
+                                <p class="form-section-title">Contato</p>
+                                <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                    <div class="campo-form" style="flex:2;">
+                                        <label for="edit-vol-email">E-mail <span class="req" aria-hidden="true">*</span></label>
+                                        <input type="email" id="edit-vol-email" name="email"
+                                               value="{{ old('email', $voluntarioSelecionado->email) }}" required
+                                               class="{{ $errors->has('email') ? 'erro' : '' }}">
+                                        @error('email') <span class="erro-campo">&#9888; {{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="campo-form">
+                                        <label for="edit-vol-tel">Telefone</label>
+                                        <input type="text" id="edit-vol-tel" name="telefone"
+                                               value="{{ old('telefone', $voluntarioSelecionado->telefone) }}"
+                                               placeholder="(00) 00000-0000" maxlength="15">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div style="margin-top:15px;">
+                            <div class="form-section">
+                                <p class="form-section-title">Perfil</p>
+                                <div class="campo-form" style="margin-bottom:12px;">
+                                    <label for="edit-vol-skills">Habilidades / Skills</label>
+                                    <input type="text" id="edit-vol-skills" name="skills"
+                                           value="{{ old('skills', $voluntarioSelecionado->skills) }}"
+                                           placeholder="Ex.: cozinha, enfermagem, música...">
+                                </div>
+                                <div class="campo-form">
+                                    <label for="edit-vol-obs">Observações</label>
+                                    <textarea id="edit-vol-obs" name="observacoes">{{ old('observacoes', $voluntarioSelecionado->observacoes) }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
                                 <button type="submit" class="btn-add">Salvar Voluntário</button>
+                                <a href="{{ route('dashboard') }}" class="btn-acao danger">Cancelar</a>
                             </div>
                         </form>
                     </div>
@@ -902,9 +1329,7 @@
                                 <td>{{ $voluntario->skills ? (strlen($voluntario->skills) > 60 ? substr($voluntario->skills, 0, 60).'...' : $voluntario->skills) : '-' }}</td>
                                 <td>
                                     <div class="acoes-linha">
-                                        <a href="{{ route('dashboard', ['voluntario' => $voluntario->id]) }}">
-                                            <button class="edit" type="button">Editar</button>
-                                        </a>
+                                        <a href="{{ route('dashboard', ['voluntario' => $voluntario->id]) }}" class="btn-acao edit">Editar</a>
                                         <form method="POST" action="{{ route('voluntarios.destroy', $voluntario->id) }}" onsubmit="return confirm('Deseja realmente excluir este voluntário?')">
                                             @csrf
                                             @method('DELETE')
@@ -940,6 +1365,41 @@
 </div>
 
 <script>
+function mostrarNotificacao(mensagem, tipo) {
+    tipo = tipo || 'info';
+    let notif = document.getElementById('app-notificacao');
+    if (!notif) {
+        notif = document.createElement('div');
+        notif.id = 'app-notificacao';
+        notif.setAttribute('role', 'alert');
+        notif.setAttribute('aria-live', 'polite');
+        notif.style.cssText = [
+            'position:fixed', 'top:20px', 'right:20px', 'z-index:9999',
+            'padding:12px 20px', 'border-radius:8px', 'font-weight:700',
+            'max-width:360px', 'box-shadow:0 4px 12px rgba(0,0,0,.2)',
+            'transition:opacity .3s', 'display:none'
+        ].join(';');
+        document.body.appendChild(notif);
+    }
+    const cores = {
+        sucesso: { bg: '#2ecc71', cor: '#fff' },
+        erro:    { bg: '#e74c3c', cor: '#fff' },
+        aviso:   { bg: '#f39c12', cor: '#fff' },
+        info:    { bg: '#3498db', cor: '#fff' }
+    };
+    const c = cores[tipo] || cores.info;
+    notif.style.background = c.bg;
+    notif.style.color = c.cor;
+    notif.textContent = mensagem;
+    notif.style.opacity = '1';
+    notif.style.display = 'block';
+    clearTimeout(notif._timer);
+    notif._timer = setTimeout(() => {
+        notif.style.opacity = '0';
+        setTimeout(() => { notif.style.display = 'none'; }, 300);
+    }, 4500);
+}
+
 function toggleListaIdosos() {
     const lista = document.getElementById("lista-idosos");
     if (!lista) return;
@@ -1105,7 +1565,7 @@ function buscarCep(input) {
         .then(response => response.json())
         .then(data => {
             if (data.erro) {
-                alert('CEP não encontrado. Verifique o número e tente novamente.');
+                mostrarNotificacao('CEP não encontrado. Verifique o número e tente novamente.', 'aviso');
                 return;
             }
 
@@ -1114,7 +1574,7 @@ function buscarCep(input) {
             if (cidadeInput) cidadeInput.value = data.localidade || '';
         })
         .catch(() => {
-            alert('Não foi possível consultar o CEP. Tente novamente mais tarde.');
+            mostrarNotificacao('Não foi possível consultar o CEP. Tente novamente mais tarde.', 'erro');
         });
 }
 

@@ -1,232 +1,244 @@
-const ctx = document.getElementById('grafico');
+'use strict';
 
-new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-        datasets: [{
-            label: 'Doações (R$)',
-            data: [500, 750, 620, 910, 820, 1010, 970, 980, 1020, 860, 940, 1110],
-            backgroundColor: 'rgba(46, 204, 113, 0.78)',
-            borderColor: 'rgba(46, 204, 113, 1)',
-            borderWidth: 2,
-            borderRadius: 8,
-            barPercentage: 0.55,
-            categoryPercentage: 0.5
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                grid: { display: false },
-                ticks: { color: '#1a1a1a', font: { size: 16, weight: '700' } }
-            },
-            y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.09)' },
-                ticks: { color: '#1a1a1a', font: { size: 14, weight: '600' } }
-            }
-        },
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                titleColor: '#111',
-                bodyColor: '#111',
-                borderColor: '#d3d3d3',
-                borderWidth: 1,
-                boxPadding: 8
-            }
-        }
-    }
-});
-
-const ctxDoacoes = document.getElementById('grafico-doacoes');
-
-new Chart(ctxDoacoes, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-        datasets: [
-            {
-                label: 'Ano anterior',
-                data: [420, 670, 580, 840, 760, 880, 890, 920, 940, 790, 830, 910],
-                borderColor: 'rgba(52, 152, 219, 1)',
-                backgroundColor: 'rgba(52, 152, 219, 0.35)',
-                fill: true,
-                tension: 0.35,
-                pointRadius: 4,
-                pointBackgroundColor: 'rgba(52, 152, 219, 1)'
-            },
-            {
-                label: 'Ano atual',
-                data: [500, 750, 620, 910, 820, 1010, 970, 980, 1020, 860, 940, 1110],
-                borderColor: 'rgba(46, 204, 113, 1)',
-                backgroundColor: 'rgba(46, 204, 113, 0.30)',
-                fill: true,
-                tension: 0.35,
-                pointRadius: 4,
-                pointBackgroundColor: 'rgba(46, 204, 113, 1)'
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                grid: { display: false },
-                ticks: { color: '#1a1a1a', font: { size: 15, weight: '700' } }
-            },
-            y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.09)' },
-                ticks: { color: '#1a1a1a', font: { size: 13, weight: '600' } }
-            }
-        },
-        plugins: {
-            legend: { position: 'top', labels: { color: '#1a1a1a', font: { size: 14 } } },
-            tooltip: {
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                titleColor: '#111',
-                bodyColor: '#111',
-                borderColor: '#d3d3d3',
-                borderWidth: 1,
-                boxPadding: 8
-            }
-        }
-    }
-});
+/* ==========================================================
+   Dashboard — gerenciamento local de idosos (modo legado)
+   Dados ficam apenas em memória de sessão; nenhum dado
+   sensível é persistido no navegador.
+   ========================================================== */
 
 let idosos = [];
 let editIndex = null;
 
-function carregarStorage() {
-    const dados = JSON.parse(localStorage.getItem('idososCadastro') || '[]');
-    idosos = dados;
-    atualizarTabela();
-    atualizarContador();
+// ── Utilitários DOM seguros ──────────────────────────────────
+
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
 }
 
-function atualizarStorage() {
-    localStorage.setItem('idososCadastro', JSON.stringify(idosos));
-    atualizarContador();
+function mostrarNotificacao(mensagem, tipo) {
+    tipo = tipo || 'info';
+    let notif = document.getElementById('dashboard-notificacao');
+    if (!notif) {
+        notif = document.createElement('div');
+        notif.id = 'dashboard-notificacao';
+        notif.setAttribute('role', 'alert');
+        notif.setAttribute('aria-live', 'polite');
+        notif.style.cssText = [
+            'position:fixed', 'top:20px', 'right:20px', 'z-index:9999',
+            'padding:12px 20px', 'border-radius:8px', 'font-weight:700',
+            'max-width:360px', 'box-shadow:0 4px 12px rgba(0,0,0,.2)',
+            'transition:opacity .3s'
+        ].join(';');
+        document.body.appendChild(notif);
+    }
+
+    var cores = {
+        sucesso: { bg: '#2ecc71', cor: '#fff' },
+        erro:    { bg: '#e74c3c', cor: '#fff' },
+        aviso:   { bg: '#f39c12', cor: '#fff' },
+        info:    { bg: '#3498db', cor: '#fff' }
+    };
+    var c = cores[tipo] || cores.info;
+    notif.style.background = c.bg;
+    notif.style.color = c.cor;
+    notif.textContent = mensagem;
+    notif.style.opacity = '1';
+    notif.style.display = 'block';
+
+    clearTimeout(notif._timer);
+    notif._timer = setTimeout(function () {
+        notif.style.opacity = '0';
+        setTimeout(function () { notif.style.display = 'none'; }, 300);
+    }, 4000);
 }
+
+// ── Cálculo de idade ─────────────────────────────────────────
 
 function calcularIdade(dataNascimento) {
     if (!dataNascimento) return null;
-    const nascimento = new Date(dataNascimento);
+    var nascimento = new Date(dataNascimento);
     if (Number.isNaN(nascimento.getTime())) return null;
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const diaAtual = hoje.getDate();
-    if (mesAtual < nascimento.getMonth() || (mesAtual === nascimento.getMonth() && diaAtual < nascimento.getDate())) {
+    var hoje = new Date();
+    var idade = hoje.getFullYear() - nascimento.getFullYear();
+    if (
+        hoje.getMonth() < nascimento.getMonth() ||
+        (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate())
+    ) {
         idade -= 1;
     }
     return idade;
 }
 
+// ── Contador ─────────────────────────────────────────────────
+
 function atualizarContador() {
-    const contador = document.getElementById('contador-idosos');
+    var contador = document.getElementById('contador-idosos');
     if (contador) {
-        contador.innerText = idosos.length;
+        contador.textContent = idosos.length;
     }
 }
 
+// ── Navegação ────────────────────────────────────────────────
+
 function irParaFicha() {
-    const tipo = document.getElementById('tipo-ficha');
-    const url = tipo ? tipo.value : 'FichaDeCadastro1.html';
+    var tipo = document.getElementById('tipo-ficha');
+    var url = tipo ? tipo.value : 'FichaDeCadastro1.html';
     window.location.href = url;
 }
 
-window.addEventListener('load', carregarStorage);
+// ── Lista ────────────────────────────────────────────────────
 
-
-// MOSTRAR LISTA
 function toggleLista() {
-    const lista = document.getElementById("lista-idosos");
-    lista.style.display = lista.style.display === "block" ? "none" : "block";
+    var lista = document.getElementById('lista-idosos');
+    if (!lista) return;
+    lista.style.display = lista.style.display === 'block' ? 'none' : 'block';
     atualizarTabela();
 }
 
-// ABRIR FORM
+// ── Formulário ───────────────────────────────────────────────
+
 function abrirForm() {
-    document.getElementById("form-container").style.display = "block";
+    var form = document.getElementById('form-container');
+    if (form) form.style.display = 'block';
 }
 
-// SALVAR (ADD OU EDIT)
+function limparForm() {
+    var campos = ['nome', 'idade', 'cpf', 'responsavel'];
+    campos.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    var form = document.getElementById('form-container');
+    if (form) form.style.display = 'none';
+    editIndex = null;
+}
+
+// ── Salvar (cadastrar ou editar) ─────────────────────────────
+
 function salvar() {
-    const idoso = {
-        nome: nome.value,
-        idade: idade.value,
-        cpf: cpf.value,
-        responsavel: responsavel.value
+    var nomeEl       = document.getElementById('nome');
+    var idadeEl      = document.getElementById('idade');
+    var cpfEl        = document.getElementById('cpf');
+    var responsavelEl = document.getElementById('responsavel');
+
+    if (!nomeEl || !nomeEl.value.trim()) {
+        mostrarNotificacao('O campo Nome é obrigatório.', 'aviso');
+        return;
+    }
+
+    var idoso = {
+        nome:        nomeEl.value.trim(),
+        idade:       idadeEl ? idadeEl.value.trim() : '',
+        cpf:         cpfEl ? cpfEl.value.trim() : '',
+        responsavel: responsavelEl ? responsavelEl.value.trim() : ''
     };
 
     if (editIndex === null) {
         idosos.push(idoso);
+        mostrarNotificacao('Idoso cadastrado com sucesso.', 'sucesso');
     } else {
         idosos[editIndex] = idoso;
+        mostrarNotificacao('Idoso atualizado com sucesso.', 'sucesso');
         editIndex = null;
     }
 
-    atualizarStorage();
+    atualizarContador();
     limparForm();
     atualizarTabela();
 }
 
-// ATUALIZAR TABELA
-function atualizarTabela() {
-    const corpo = document.getElementById("corpo-tabela");
-    corpo.innerHTML = "";
+// ── Tabela (sem innerHTML com dados) ─────────────────────────
 
-    idosos.forEach((idoso, index) => {
-        const idadeValor = idoso.idade ? idoso.idade : calcularIdade(idoso.nascimento);
-        corpo.innerHTML += `
-        <tr>
-            <td>${idoso.nome || ''}</td>
-            <td>${idadeValor !== null ? idadeValor : '—'}</td>
-            <td>${idoso.cpf || ''}</td>
-            <td>${idoso.responsavel || ''}</td>
-            <td>
-                <button class="edit" onclick="editar(${index})">Editar</button>
-                <button class="delete" onclick="excluir(${index})">Excluir</button>
-            </td>
-        </tr>
-        `;
+function atualizarTabela() {
+    var corpo = document.getElementById('corpo-tabela');
+    if (!corpo) return;
+
+    while (corpo.firstChild) {
+        corpo.removeChild(corpo.firstChild);
+    }
+
+    idosos.forEach(function (idoso, index) {
+        var idadeValor = idoso.idade || calcularIdade(idoso.nascimento);
+
+        var tr = document.createElement('tr');
+
+        var tdNome = document.createElement('td');
+        tdNome.textContent = idoso.nome || '';
+
+        var tdIdade = document.createElement('td');
+        tdIdade.textContent = idadeValor !== null && idadeValor !== '' ? idadeValor : '—';
+
+        var tdCpf = document.createElement('td');
+        tdCpf.textContent = idoso.cpf || '';
+
+        var tdResponsavel = document.createElement('td');
+        tdResponsavel.textContent = idoso.responsavel || '';
+
+        var tdAcoes = document.createElement('td');
+
+        var btnEditar = document.createElement('button');
+        btnEditar.className = 'edit';
+        btnEditar.textContent = 'Editar';
+        btnEditar.setAttribute('aria-label', 'Editar ' + idoso.nome);
+        btnEditar.addEventListener('click', function () { editar(index); });
+
+        var btnExcluir = document.createElement('button');
+        btnExcluir.className = 'delete';
+        btnExcluir.textContent = 'Excluir';
+        btnExcluir.setAttribute('aria-label', 'Excluir ' + idoso.nome);
+        btnExcluir.addEventListener('click', function () { excluir(index); });
+
+        tdAcoes.appendChild(btnEditar);
+        tdAcoes.appendChild(document.createTextNode(' '));
+        tdAcoes.appendChild(btnExcluir);
+
+        tr.appendChild(tdNome);
+        tr.appendChild(tdIdade);
+        tr.appendChild(tdCpf);
+        tr.appendChild(tdResponsavel);
+        tr.appendChild(tdAcoes);
+
+        corpo.appendChild(tr);
     });
 }
 
-// EDITAR
+// ── Editar ───────────────────────────────────────────────────
+
 function editar(index) {
-    const idoso = idosos[index];
+    var idoso = idosos[index];
     if (!idoso) {
-        alert('Idoso não encontrado para edição. Por favor, atualize a página e tente novamente.');
+        mostrarNotificacao('Idoso não encontrado. Atualize a página e tente novamente.', 'erro');
         return;
     }
-    localStorage.setItem('editarIdosoIndex', index);
-    localStorage.setItem('editarIdosoData', JSON.stringify(idoso));
-    window.location.href = 'FichaDeCadastro1.html';
+
+    editIndex = index;
+
+    var nomeEl       = document.getElementById('nome');
+    var idadeEl      = document.getElementById('idade');
+    var cpfEl        = document.getElementById('cpf');
+    var responsavelEl = document.getElementById('responsavel');
+
+    if (nomeEl)       nomeEl.value       = idoso.nome        || '';
+    if (idadeEl)      idadeEl.value      = idoso.idade       || '';
+    if (cpfEl)        cpfEl.value        = idoso.cpf         || '';
+    if (responsavelEl) responsavelEl.value = idoso.responsavel || '';
+
+    abrirForm();
 }
 
-// EXCLUIR
+// ── Excluir ──────────────────────────────────────────────────
+
 function excluir(index) {
-    if (confirm("Deseja excluir este idoso?")) {
+    var idoso = idosos[index];
+    if (!idoso) return;
+
+    if (window.confirm('Deseja excluir ' + idoso.nome + '?')) {
         idosos.splice(index, 1);
-        atualizarStorage();
+        atualizarContador();
         atualizarTabela();
+        mostrarNotificacao('Idoso removido.', 'info');
     }
-}
-
-// LIMPAR FORM
-function limparForm() {
-    nome.value = "";
-    idade.value = "";
-    cpf.value = "";
-    responsavel.value = "";
-
-    document.getElementById("form-container").style.display = "none";
 }
