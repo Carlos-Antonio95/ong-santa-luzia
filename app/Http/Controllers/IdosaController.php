@@ -19,8 +19,8 @@ class IdosaController extends Controller
 
         $idosas = Idosa::query()
             ->when($search, function ($query) use ($search) {
-                $query->where('nome', 'like', "%{$search}%")
-                    ->orWhere('cpf', 'like', '%' . preg_replace('/\D+/', '', $search) . '%');
+                $query->whereLike('nome', "%{$search}%")
+                    ->orWhereLike('cpf', '%' . preg_replace('/\D+/', '', $search) . '%');
             })
             ->latest()
             ->paginate(10)

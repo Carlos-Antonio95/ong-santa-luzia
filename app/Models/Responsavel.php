@@ -37,8 +37,8 @@ class Responsavel extends Model
         $searchNumbers = preg_replace('/\D+/', '', $search);
 
         return $query->where(function ($q) use ($search, $searchNumbers) {
-            $q->where('nome', 'like', "%{$search}%")
-                ->orWhere('cpf', 'like', "%{$searchNumbers}%");
+            $q->whereLike('nome', "%{$search}%")
+                ->orWhereLike('cpf', "%{$searchNumbers}%");
         });
     }
 

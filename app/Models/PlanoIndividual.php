@@ -49,8 +49,8 @@ class PlanoIndividual extends Model
         $searchNumbers = preg_replace('/\D+/', '', $search);
 
         return $query->whereHas('idosa', function ($subQuery) use ($search, $searchNumbers) {
-            $subQuery->where('nome', 'like', "%{$search}%")
-                ->orWhere('cpf', 'like', "%{$searchNumbers}%");
+            $subQuery->whereLike('nome', "%{$search}%")
+                ->orWhereLike('cpf', "%{$searchNumbers}%");
         });
     }
 }

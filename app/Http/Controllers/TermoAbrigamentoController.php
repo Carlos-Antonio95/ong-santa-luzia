@@ -17,9 +17,9 @@ class TermoAbrigamentoController extends Controller
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereHas('idosa', function ($subQuery) use ($search) {
-                        $subQuery->where('nome', 'like', "%{$search}%");
+                        $subQuery->whereLike('nome', "%{$search}%");
                     })->orWhereHas('responsavel', function ($subQuery) use ($search) {
-                        $subQuery->where('nome', 'like', "%{$search}%");
+                        $subQuery->whereLike('nome', "%{$search}%");
                     });
                 });
             })
