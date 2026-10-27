@@ -43,8 +43,12 @@ Route::middleware(['auth'])->group(function () {
   
     Route::resource('voluntarios', VoluntarioController::class)->only(['store', 'update', 'destroy']);
 
-    Route::resource('doadores', DoadorController::class)->only(['store', 'update', 'destroy']);
-    Route::resource('doacoes', DoacaoController::class)->only(['update', 'destroy']);
+    Route::resource('doadores', DoadorController::class)
+        ->only(['store', 'update', 'destroy'])
+        ->parameters(['doadores' => 'doador']);
+    Route::resource('doacoes', DoacaoController::class)
+        ->only(['update', 'destroy'])
+        ->parameters(['doacoes' => 'doacao']);
 
     Route::post('/doadores/{doador}/doacoes', [DoacaoController::class, 'store'])
         ->name('doacoes.store');
