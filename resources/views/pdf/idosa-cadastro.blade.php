@@ -77,7 +77,7 @@
 
     <!-- ✅ MARCA D'ÁGUA -->
     <div class="watermark">
-         <img src="{{ asset('imagens/logo-marca-dagua.png') }}" alt="Marca d'água">
+         <img src="{{ public_path('imagens/logo-marca-dagua.png') }}" alt="Marca d'água">
     </div>
 
     <div class="header">

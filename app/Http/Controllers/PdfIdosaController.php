@@ -11,7 +11,7 @@ class PdfIdosaController extends Controller
     {
         $pdf = Pdf::loadView('pdf.idosa-cadastro', compact('idosa'))
             ->setOptions([
-                'isRemoteEnabled' => true,
+                'isRemoteEnabled' => false,
             ])
             ->setPaper('a4');
 
@@ -24,7 +24,7 @@ class PdfIdosaController extends Controller
 
         $pdf = Pdf::loadView('pdf.idosa-plano', compact('idosa'))
             ->setOptions([
-                'isRemoteEnabled' => true,
+                'isRemoteEnabled' => false,
             ])
             ->setPaper('a4');
 
@@ -37,7 +37,7 @@ class PdfIdosaController extends Controller
 
         $pdf = Pdf::loadView('pdf.idosa-termo', compact('idosa'))
             ->setOptions([
-                'isRemoteEnabled' => true,
+                'isRemoteEnabled' => false,
             ])
             ->setPaper('a4');
 
@@ -54,7 +54,7 @@ class PdfIdosaController extends Controller
 
         $pdf = Pdf::loadView('pdf.idosa-completo', compact('idosa'))
             ->setOptions([
-                'isRemoteEnabled' => true,
+                'isRemoteEnabled' => false,
             ])
             ->setPaper('a4');
 
