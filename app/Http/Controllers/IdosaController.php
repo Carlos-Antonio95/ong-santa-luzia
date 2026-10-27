@@ -10,7 +10,6 @@ use App\Models\Idosa;
 use App\Models\UserSetting;
 use App\Models\Voluntario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class IdosaController extends Controller
 {
@@ -108,24 +107,27 @@ class IdosaController extends Controller
         $voluntarioSelecionado = Voluntario::findOrFail($request->voluntario);
     }
 
-    $doacoesAgrupadas = Doacao::selectRaw('YEAR(data_doacao) as ano, MONTH(data_doacao) as mes, SUM(valor) as total')
-        ->whereIn(DB::raw('YEAR(data_doacao)'), [now()->year - 1, now()->year])
-        ->groupByRaw('YEAR(data_doacao), MONTH(data_doacao)')
-        ->orderByRaw('YEAR(data_doacao), MONTH(data_doacao)')
-        ->get();
+    // Agrupamento por ano/mês feito em PHP para não depender de funções de
+    // data específicas do banco (YEAR()/MONTH() não existem no PostgreSQL).
+    $anoAtual = now()->year;
+
+    $doacoes = Doacao::query()
+        ->whereBetween('data_doacao', [
+            now()->subYear()->startOfYear()->toDateString(),
+            now()->endOfYear()->toDateString(),
+        ])
+        ->get(['data_doacao', 'valor']);
 
     $dadosMesAtual = array_fill(0, 12, 0);
     $dadosAnoPassado = array_fill(0, 12, 0);
 
-    foreach ($doacoesAgrupadas as $item) {
-        $indice = $item->mes - 1;
+    foreach ($doacoes as $doacao) {
+        $indice = $doacao->data_doacao->month - 1;
 
-        if ((int) $item->ano === (int) now()->year) {
-            $dadosMesAtual[$indice] = (float) $item->total;
-        }
-
-        if ((int) $item->ano === (int) now()->year - 1) {
-            $dadosAnoPassado[$indice] = (float) $item->total;
+        if ($doacao->data_doacao->year === $anoAtual) {
+            $dadosMesAtual[$indice] += (float) $doacao->valor;
+        } else {
+            $dadosAnoPassado[$indice] += (float) $doacao->valor;
         }
     }
     $settings = [];
