@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\IdosaController;
 use App\Http\Controllers\PlanoIndividualController;
 use App\Http\Controllers\TermoAbrigamentoController;
@@ -62,7 +63,7 @@ Route::get('/alterar-senha', function () {
 Route::post('/alterar-senha', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'current_password' => ['required', 'current_password'],
-        'password' => ['required', 'confirmed', 'min:6'],
+        'password' => ['required', 'confirmed', Password::defaults()],
     ]);
 
     $user = auth()->user();
