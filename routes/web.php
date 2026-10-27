@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IdosaController;
-use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\PlanoIndividualController;
 use App\Http\Controllers\TermoAbrigamentoController;
 use App\Http\Controllers\PdfIdosaController;
@@ -20,10 +19,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [IdosaController::class, 'dashboard'])->name('dashboard');
 
-    Route::resource('idosas', IdosaController::class);
-    Route::resource('responsaveis', ResponsavelController::class);
-    Route::resource('planos', PlanoIndividualController::class);
-    Route::resource('termos', TermoAbrigamentoController::class);
+    Route::resource('idosas', IdosaController::class)->only(['store', 'show', 'update', 'destroy']);
 
     Route::post('/idosas/{idosa}/plano', [PlanoIndividualController::class, 'storeOrUpdate'])
         ->name('plano.storeOrUpdate');
@@ -44,10 +40,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('idosas.pdf.completo');
 
   
-    Route::resource('voluntarios', VoluntarioController::class);
+    Route::resource('voluntarios', VoluntarioController::class)->only(['store', 'update', 'destroy']);
 
-    Route::resource('doadores', DoadorController::class);
-    Route::resource('doacoes', DoacaoController::class)->except(['store']);
+    Route::resource('doadores', DoadorController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('doacoes', DoacaoController::class)->only(['update', 'destroy']);
 
     Route::post('/doadores/{doador}/doacoes', [DoacaoController::class, 'store'])
         ->name('doacoes.store');
