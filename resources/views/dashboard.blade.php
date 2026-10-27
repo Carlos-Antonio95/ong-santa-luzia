@@ -40,7 +40,7 @@ s0.parentNode.insertBefore(s1,s0);
 @endif
 <header class="header">
     <a class="logo-area" href="{{ route('dashboard') }}">
-        <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}">
+        <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}" alt="Logotipo do Abrigo Santa Luzia">
         <h1>Dashboard</h1>
     </a>
 
@@ -198,7 +198,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <h4 class="form-section-title">Situação no Abrigo</h4>
                     <div class="grupo-campos">
                         <div class="campo-form">
-                            <label for="ni-deficiencia">Grau de dependência</label>
+                            <label for="ni-deficiencia">Deficiência / necessidade especial</label>
                             <input type="text" id="ni-deficiencia" name="deficiencia" value="{{ old('deficiencia') }}" placeholder="Ex.: mobilidade reduzida">
                         </div>
                         <div class="campo-form">
@@ -336,7 +336,7 @@ s0.parentNode.insertBefore(s1,s0);
                             <h4 class="form-section-title">Situação no Abrigo</h4>
                             <div class="grupo-campos">
                                 <div class="campo-form">
-                                    <label for="ei-deficiencia">Grau de dependência</label>
+                                    <label for="ei-deficiencia">Deficiência / necessidade especial</label>
                                     <input type="text" id="ei-deficiencia" name="deficiencia" value="{{ old('deficiencia', $idosaSelecionada->deficiencia) }}">
                                 </div>
                                 <div class="campo-form">
