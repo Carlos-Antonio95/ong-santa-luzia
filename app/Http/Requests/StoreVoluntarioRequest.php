@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreVoluntarioRequest extends FormRequest
 {
@@ -15,7 +16,12 @@ class StoreVoluntarioRequest extends FormRequest
     {
         return [
             'nome' => 'required|string|max:100',
-            'email' => 'required|email|max:150|unique:voluntarios,email,' . $this->route('voluntario'),
+            'email' => [
+                'required',
+                'email',
+                'max:150',
+                Rule::unique('voluntarios', 'email')->ignore($this->route('voluntario')),
+            ],
             'telefone' => 'nullable|string|max:20',
             'data_nascimento' => 'nullable|date',
             'skills' => 'nullable|string|max:1000',
