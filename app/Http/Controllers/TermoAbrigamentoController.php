@@ -124,7 +124,9 @@ class TermoAbrigamentoController extends Controller
             'assinado_assistente_social' => ['nullable', 'boolean'],
         ]);
 
-        $responsavel = Responsavel::updateOrCreate(
+        // withTrashed: um responsável excluído com o mesmo CPF é reaproveitado
+        // em vez de violar o índice unique de responsaveis.cpf.
+        $responsavel = Responsavel::withTrashed()->updateOrCreate(
             ['cpf' => preg_replace('/\D+/', '', $data['responsavel_cpf'])],
             [
                 'nome' => $data['responsavel_nome'],
@@ -134,6 +136,10 @@ class TermoAbrigamentoController extends Controller
                 'endereco' => $data['responsavel_endereco'] ?? null,
             ]
         );
+
+        if ($responsavel->trashed()) {
+            $responsavel->restore();
+        }
 
         $ultimoTermo = $idosa->ultimoTermo;
 
