@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Idosa;
+use App\Observers\IdosaObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -24,11 +26,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->registerObservers();
     }
 
-    /**
-     * Configure default behaviors for production-ready applications.
-     */
+    protected function registerObservers(): void
+    {
+        Idosa::observe(IdosaObserver::class);
+    }
+
     protected function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);

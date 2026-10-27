@@ -1,0 +1,175 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+/* HEADER PADRÃO */
+.topo-simples {
+    width: 100%;
+    background: linear-gradient(90deg, #2F3E36, #2F3E36);
+    padding: 12px 20px;
+}
+
+.topo-conteudo {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topo-logo img {
+    height: 50px;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+    background: white;
+    color: #2F3E36;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    background: #f1f5f9;
+    color: #2563EB;
+}
+
+/* CONTAINER */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 90px);
+    padding: 20px;
+}
+
+/* CARD */
+.login-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.login-card h2 {
+    margin-bottom: 5px;
+    color: #111827;
+}
+
+.subtitulo {
+    color: #4B5563;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* INPUTS */
+.input-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border-radius: 8px;
+    border: 1px solid #D1D5DB;
+    color: #111827;
+    background: #ffffff;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #2F3E36;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* SENHA */
+.senha-box {
+    position: relative;
+}
+
+.eye {
+    position: absolute;
+    right: 10px;
+    top: 35%;
+    cursor: pointer;
+}
+
+/* BOTÃO */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #2F3E36;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background: #2563EB;
+}
+
+/* ERROS */
+.erro {
+    color: #e53935;
+    font-size: 13px;
+    display: block;
+    margin-top: 5px;
+}
+
+.erro-geral {
+    background: #ffdddd;
+    color: #a00;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* LINKS */
+.extra-links {
+    margin-top: 12px;
+}
+
+.extra-links a {
+    color: #2563EB;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
+
+/* RESPONSIVO */
+@media (max-width: 480px) {
+    .topo-logo img {
+        height: 40px;
+    }
+
+    .btn-voltar {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .login-card {
+        padding: 22px;
+    }
+}

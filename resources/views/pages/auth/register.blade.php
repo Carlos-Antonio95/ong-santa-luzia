@@ -1,67 +1,97 @@
-<x-layouts::auth :title="__('Register')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - ONG Santa Luzia</title>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+    <link rel="stylesheet" href="{{ asset('css/cadastro.css') }}?v={{ time() }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
+</head>
+<body>
 
-        <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
+<header class="topo-simples">
+    <div class="topo-conteudo">
+        <div class="topo-logo">
+            <img src="{{ asset('imagens/Logo Abrigo Santa Luzia.png') }}" alt="Logo">
+        </div>
+
+        <a href="{{ route('dashboard') }}" class="btn-voltar">
+            ← Dashboard
+        </a>
+    </div>
+</header>
+
+<section class="login-container">
+
+    <div class="login-card fade-in">
+
+        <h2>Criar conta</h2>
+        <p class="subtitulo">Preencha os dados abaixo</p>
+
+        @if(session('status'))
+            <div class="erro-geral">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('register.user.store') }}">
             @csrf
-            <!-- Name -->
-            <flux:input
-                name="name"
-                :label="__('Name')"
-                :value="old('name')"
-                type="text"
-                required
-                autofocus
-                autocomplete="name"
-                :placeholder="__('Full name')"
-            />
 
-            <!-- Email Address -->
-            <flux:input
-                name="email"
-                :label="__('Email address')"
-                :value="old('email')"
-                type="email"
-                required
-                autocomplete="email"
-                placeholder="email@example.com"
-            />
+            <div class="input-group">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="Nome completo" required>
 
-            <!-- Password -->
-            <flux:input
-                name="password"
-                :label="__('Password')"
-                type="password"
-                required
-                autocomplete="new-password"
-                :placeholder="__('Password')"
-                viewable
-            />
+                @error('name')
+                    <span class="erro">{{ $message }}</span>
+                @enderror
+            </div>
 
-            <!-- Confirm Password -->
-            <flux:input
-                name="password_confirmation"
-                :label="__('Confirm password')"
-                type="password"
-                required
-                autocomplete="new-password"
-                :placeholder="__('Confirm password')"
-                viewable
-            />
+            <div class="input-group">
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="E-mail" required>
 
-            <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
-                    {{ __('Create account') }}
-                </flux:button>
+                @error('email')
+                    <span class="erro">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="input-group">
+                <div class="senha-box">
+                    <input id="senha" type="password" name="password" placeholder="Senha" required>
+                    <span onclick="toggleSenha('senha')" class="eye">👁</span>
+                </div>
+
+                @error('password')
+                    <span class="erro">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="input-group">
+                <div class="senha-box">
+                    <input id="confirmarSenha" type="password" name="password_confirmation" placeholder="Confirmar senha" required>
+                    <span onclick="toggleSenha('confirmarSenha')" class="eye">👁</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">
+                Criar conta
+            </button>
+
+            <div class="extra-links">
+                <a href="{{ route('login') }}">Já tenho conta</a>
             </div>
         </form>
 
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('Already have an account?') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
-        </div>
     </div>
-</x-layouts::auth>
+
+</section>
+
+<script>
+function toggleSenha(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+</script>
+
+<x-accessibility-feedback />
+</body>
+</html>
